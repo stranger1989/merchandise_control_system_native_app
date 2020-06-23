@@ -6,8 +6,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "lint": "eslint --ext ./ 'src/**/*.{js,jsx,ts,tsx}';",
+    "storybook": "start-storybook -p 7007",
+    "build-storybook": "build-storybook",
+    "precommit": "lint-staged"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
@@ -20,6 +22,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.1.tar.gz",
+    "react-native-dotenv": "^0.2.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-reanimated": "^1.9.0",
     "react-native-safe-area-context": "^3.0.2",
@@ -35,16 +38,40 @@
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
-    "@expo/webpack-config": "^0.12.15",
     "@storybook/addon-actions": "^5.3.19",
     "@storybook/addon-links": "^5.3.19",
     "@storybook/addons": "^5.3.19",
-    "@storybook/react": "^5.3.19",
+    "@storybook/react-native": "^5.3.19",
+    "@storybook/react-native-server": "^5.3.19",
     "@types/react": "~16.9.23",
     "@types/react-native": "~0.61.17",
+    "@types/react-native-dotenv": "^0.2.0",
+    "@types/storybook__react": "^5.2.1",
+    "@typescript-eslint/eslint-plugin": "^3.3.0",
+    "@typescript-eslint/parser": "^3.3.0",
     "babel-loader": "^8.1.0",
     "babel-preset-expo": "~8.1.0",
+    "eslint": "^7.3.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.20.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "prettier": "^2.0.5",
     "typescript": "~3.8.3"
   },
-  "private": true
+  "private": true,
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "trailingComma": "all",
+    "semi": true
+  }
 }
