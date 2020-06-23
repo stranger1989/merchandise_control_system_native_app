@@ -1,12 +1,18 @@
 import React from 'react';
 // import { connect } from 'react-redux';
-import {
-  Container,
-} from 'native-base';
+import { Container } from 'native-base';
 
 import HeaderComponent from '../components/03_organisms/Header';
 
-const AccountScreen: React.FC<any> = ({ navigation }) => {
+import {
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from 'react-navigation';
+
+const AccountScreen: React.FC<{
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+}> = ({ navigation }) => {
   return (
     <Container>
       <HeaderComponent navigation={navigation} />

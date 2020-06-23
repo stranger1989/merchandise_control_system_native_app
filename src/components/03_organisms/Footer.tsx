@@ -1,13 +1,15 @@
 import React, { FC } from 'react';
+import { Footer, FooterTab, Button, Icon, Text } from 'native-base';
 import {
-  Footer,
-  FooterTab,
-  Button,
-  Icon,
-  Text,
-} from 'native-base';
+  NavigationScreenProp,
+  NavigationState,
+  NavigationParams,
+} from 'react-navigation';
 
-const FooterComponent: FC<any> = ({ navigation, navigationIndex }) => {
+const FooterComponent: FC<{
+  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  navigationIndex: number;
+}> = ({ navigation, navigationIndex = 0 }) => {
   return (
     <Footer>
       <FooterTab>
@@ -37,7 +39,7 @@ const FooterComponent: FC<any> = ({ navigation, navigationIndex }) => {
         </Button>
       </FooterTab>
     </Footer>
-  )
+  );
 };
 
 export default FooterComponent;

@@ -4,7 +4,7 @@ import * as Action from '../actions/itemConstants';
 import { fetchItems } from '../actions/item';
 import { fetchItemsFactory } from '../services/item/api';
 
-function* runFetchItems(action: ReturnType<typeof fetchItems.start>) {
+function* runFetchItems() {
   try {
     const api = fetchItemsFactory();
     const items = yield call(api);

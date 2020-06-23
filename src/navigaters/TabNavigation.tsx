@@ -8,6 +8,17 @@ import AccountScreen from '../screens/AccountScreen';
 
 import FooterComponent from '../components/03_organisms/Footer';
 
+import { NavigationParams } from 'react-navigation';
+
+const tabBarComponent = (props: NavigationParams) => {
+  return (
+    <FooterComponent
+      navigation={props.navigation}
+      navigationIndex={props.navigation.state.index}
+    />
+  );
+};
+
 const TabNavigator = createAppContainer(
   createBottomTabNavigator(
     {
@@ -17,16 +28,9 @@ const TabNavigator = createAppContainer(
     },
     {
       initialRouteName: 'Home',
-      tabBarComponent: props => {
-        return (
-          <FooterComponent
-            navigation={props.navigation}
-            navigationIndex={props.navigation.state.index}
-          />
-        );
-      }
-    }
-  )
+      tabBarComponent,
+    },
+  ),
 );
 
 export default TabNavigator;

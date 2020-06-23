@@ -21,7 +21,7 @@ const enhancer = composeEnhancers(applyMiddleware(sagaMiddleWare));
 const store = createStore(
   combineReducers({
     item: itemReducer,
-    form: reduxFormReducer
+    form: reduxFormReducer,
   }),
   enhancer,
 );

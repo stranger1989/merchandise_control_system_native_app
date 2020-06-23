@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "es5",
     "allowSyntheticDefaultImports": true,
     "jsx": "react-native",
     "lib": ["dom", "esnext"],
@@ -8,5 +9,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "strict": true
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build", "dist", "scripts"]
 }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Field,reduxForm } from 'redux-form';
-import { View } from 'react-native';
+import { Field, reduxForm, FieldArrayMetaProps } from 'redux-form';
+import { View, TextInputProps } from 'react-native';
 import {
   Container,
   Content,
@@ -12,30 +12,32 @@ import {
   Picker,
   Icon,
 } from 'native-base';
+import { NavigationParams } from 'react-navigation';
 
 import HeaderComponent from '../components/03_organisms/Header';
 
-const renderInput: React.FC<any> = ({ input, label, type, meta: { touched, error, warning } }) => {
-  let hasError= false;
-  if(error !== undefined){
-    hasError= true;
+const renderInput: React.FC<{
+  input: TextInputProps;
+  label: string;
+  meta: FieldArrayMetaProps;
+}> = ({ input, label, meta: { error } }) => {
+  let hasError = false;
+  if (error !== undefined) {
+    hasError = true;
   }
 
-  return(
-    <Item error= {hasError} fixedLabel>
+  return (
+    <Item error={hasError} fixedLabel>
       <Label>{label}</Label>
-      <Input {...input}/>
+      <Input {...input} />
       {hasError ? <Text>{error}</Text> : <Text />}
     </Item>
-  )
-}
+  );
+};
 
-const renderSelectField: React.FC<any> = ({
+const renderSelectField: React.FC<{ input: TextInputProps }> = ({
   input,
-  label,
-  meta: { touched, error },
   children,
-  ...custom
 }) => (
   <>
     <Item picker>
@@ -44,7 +46,7 @@ const renderSelectField: React.FC<any> = ({
         iosIcon={<Icon name="arrow-down" />}
         style={{ width: undefined }}
         placeholder="visible"
-        placeholderStyle={{ color: "#bfc6ea" }}
+        placeholderStyle={{ color: '#bfc6ea' }}
         placeholderIconColor="#007aff"
         selectedValue={input.value}
         onValueChange={input.onChange}
@@ -55,24 +57,22 @@ const renderSelectField: React.FC<any> = ({
   </>
 );
 
-const DetailsScreen: React.FC<any> = (props) => {
+const DetailsScreen: React.FC = (props: NavigationParams) => {
   return (
     <Container>
       <HeaderComponent navigation={props.navigation} />
-      <Content padder style={{width: '100%'}}>
+      <Content padder style={{ width: '100%' }}>
         <Field name="title" label="title" component={renderInput} />
-        <View style={{height: 20, width: 350, flex: 1}}></View>
-        <Field name="visible" label="visible" component={renderSelectField} >
+        <View style={{ height: 20, width: 350, flex: 1 }}></View>
+        <Field name="visible" label="visible" component={renderSelectField}>
           <Picker.Item label="public" value="public" />
-          <Picker.Item label="private"  value="private" />
+          <Picker.Item label="private" value="private" />
         </Field>
-        <View style={{height: 20, width: 350, flex: 1}}></View>
+        <View style={{ height: 20, width: 350, flex: 1 }}></View>
         <Field name="memo" label="memo" component={renderInput} />
-        <View style={{height: 20, width: 350, flex: 1}}></View>
-        <Button block onPress={() => {}}>
-          <Text>
-            Submit
-          </Text>
+        <View style={{ height: 20, width: 350, flex: 1 }}></View>
+        <Button block>
+          <Text>Submit</Text>
         </Button>
       </Content>
     </Container>
@@ -81,4 +81,4 @@ const DetailsScreen: React.FC<any> = (props) => {
 
 export default reduxForm({
   form: 'form',
-})(DetailsScreen)
+})(DetailsScreen);
