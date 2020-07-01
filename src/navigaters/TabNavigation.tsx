@@ -6,7 +6,7 @@ import HomeScreen from '../screens/HomeScreen';
 import AddScreen from '../screens/AddScreen';
 import AccountScreen from '../screens/AccountScreen';
 
-import FooterComponent from '../components/03_organisms/Footer';
+import FooterComponent from '../components/organisms/Footer';
 
 import { NavigationParams } from 'react-navigation';
 

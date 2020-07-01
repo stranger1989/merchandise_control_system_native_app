@@ -10,10 +10,10 @@ import {
   Icon,
   Right,
 } from 'native-base';
-import { Item } from '../../services/item/models';
+import { ItemModel } from '../../services/item/models';
 
 const CardComponent: FC<{
-  item: Item;
+  item: ItemModel;
 }> = ({ item }) => {
   return (
     <Card>

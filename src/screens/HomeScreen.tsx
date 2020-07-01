@@ -5,11 +5,11 @@ import { Container, Content, Spinner } from 'native-base';
 import { NavigationParams } from 'react-navigation';
 
 import store from '../store/configureStore';
-import { fetchItems } from '../actions/item';
-import { Item } from '../services/item/models';
+import { fetchAllItems } from '../actions/item';
+import { ItemModel } from '../services/item/models';
 
-import HeaderComponent from '../components/03_organisms/Header';
-import CardComponent from '../components/03_organisms/Card';
+import HeaderComponent from '../components/organisms/Header';
+import CardComponent from '../components/organisms/Card';
 
 type AllState = ReturnType<typeof store.getState>;
 
@@ -21,13 +21,13 @@ const mapStateToProps = (state: AllState) => ({
 const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      fetchItemsStart: () => fetchItems.start(),
+      fetchItemsStart: () => fetchAllItems.start(),
     },
     dispatch,
   );
 
 const HomeScreen: FC<{
-  items: Item[];
+  items: ItemModel[];
   isLoading: boolean;
   fetchItemsStart: () => void;
   navigation: NavigationParams;
@@ -46,7 +46,7 @@ const HomeScreen: FC<{
           <Spinner color="blue" />
         ) : (
           <Content padder>
-            {items.map((item: Item, index: number) => (
+            {items.map((item: ItemModel, index: number) => (
               <CardComponent key={index} item={item} />
             ))}
           </Content>

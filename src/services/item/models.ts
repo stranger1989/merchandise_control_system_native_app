@@ -1,4 +1,4 @@
-export interface Item {
+export interface ItemModel {
   jan_code: string;
   item_name: string;
   price: number;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { Container, Content, Text, List, ListItem } from 'native-base';
 const routes = ['Home', 'Add', 'Account'];
 
@@ -8,7 +8,7 @@ import {
   NavigationParams,
 } from 'react-navigation';
 
-const SideBar: React.FC<{
+const SideBar: FC<{
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
 }> = ({ navigation }) => {
   return (
