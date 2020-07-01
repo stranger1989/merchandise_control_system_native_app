@@ -14,4 +14,3 @@ web-report/
 .DS_Store
 
 .env
-env.d.ts
