@@ -1,84 +1,43 @@
-import React from 'react';
-import { Field, reduxForm, FieldArrayMetaProps } from 'redux-form';
-import { View, TextInputProps } from 'react-native';
-import {
-  Container,
-  Content,
-  Button,
-  Text,
-  Item,
-  Input,
-  Label,
-  Picker,
-  Icon,
-} from 'native-base';
+import React, { FC } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
+import { Container } from 'native-base';
 import { NavigationParams } from 'react-navigation';
 
-import HeaderComponent from '../components/03_organisms/Header';
+import { postItem } from '../actions/item';
+import store from '../store/configureStore';
+import { ItemModel } from '../services/item/models';
 
-const renderInput: React.FC<{
-  input: TextInputProps;
-  label: string;
-  meta: FieldArrayMetaProps;
-}> = ({ input, label, meta: { error } }) => {
-  let hasError = false;
-  if (error !== undefined) {
-    hasError = true;
-  }
+import HeaderComponent from '../components/organisms/Header';
+import PostFormComponent from '../components/organisms/PostForm';
 
-  return (
-    <Item error={hasError} fixedLabel>
-      <Label>{label}</Label>
-      <Input {...input} />
-      {hasError ? <Text>{error}</Text> : <Text />}
-    </Item>
+type AllState = ReturnType<typeof store.getState>;
+
+const mapStateToProps = (state: AllState) => ({});
+
+const mapDispatchToProps = (dispatch: Dispatch) =>
+  bindActionCreators(
+    {
+      postItemStart: (params: ItemModel) => postItem.start(params),
+    },
+    dispatch,
   );
-};
 
-const renderSelectField: React.FC<{ input: TextInputProps }> = ({
-  input,
-  children,
-}) => (
-  <>
-    <Item picker>
-      <Picker
-        mode="dropdown"
-        iosIcon={<Icon name="arrow-down" />}
-        style={{ width: undefined }}
-        placeholder="visible"
-        placeholderStyle={{ color: '#bfc6ea' }}
-        placeholderIconColor="#007aff"
-        selectedValue={input.value}
-        onValueChange={input.onChange}
-      >
-        {children}
-      </Picker>
-    </Item>
-  </>
-);
+const AddScreen: FC<{
+  postItemStart: (params: ItemModel) => void;
+  navigation: NavigationParams;
+}> = ({ postItemStart, navigation }) => {
+  const submit = (values: ItemModel) => {
+    alert(`here is the value ${JSON.stringify(values)}`);
+    postItemStart(values);
+  };
 
-const DetailsScreen: React.FC = (props: NavigationParams) => {
   return (
     <Container>
-      <HeaderComponent navigation={props.navigation} />
-      <Content padder style={{ width: '100%' }}>
-        <Field name="title" label="title" component={renderInput} />
-        <View style={{ height: 20, width: 350, flex: 1 }}></View>
-        <Field name="visible" label="visible" component={renderSelectField}>
-          <Picker.Item label="public" value="public" />
-          <Picker.Item label="private" value="private" />
-        </Field>
-        <View style={{ height: 20, width: 350, flex: 1 }}></View>
-        <Field name="memo" label="memo" component={renderInput} />
-        <View style={{ height: 20, width: 350, flex: 1 }}></View>
-        <Button block>
-          <Text>Submit</Text>
-        </Button>
-      </Content>
+      <HeaderComponent navigation={navigation} />
+      <PostFormComponent submitFunction={submit} />
     </Container>
   );
 };
 
-export default reduxForm({
-  form: 'form',
-})(DetailsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(AddScreen);

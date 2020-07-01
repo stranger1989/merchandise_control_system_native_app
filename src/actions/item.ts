@@ -1,30 +1,61 @@
 import { AxiosError } from 'axios';
 
-import { Item } from '../services/item/models';
+import { ItemModel } from '../services/item/models';
 import * as ActionType from './itemConstants';
 
 interface FetchItemsResult {
-  items: Item[];
+  items: ItemModel[];
 }
 
-export const fetchItems = {
-  start: () => ({
-    type: ActionType.FETCH_ITEMS_START as typeof ActionType.FETCH_ITEMS_START,
-  }),
+export const fetchAllItems = {
+  start: () =>
+    ({
+      type: ActionType.FETCH_ITEMS_START as typeof ActionType.FETCH_ITEMS_START,
+    } as const),
 
-  succeed: (result: FetchItemsResult) => ({
-    type: ActionType.FETCH_ITEMS_SUCCEED as typeof ActionType.FETCH_ITEMS_SUCCEED,
-    payload: { result },
-  }),
+  succeed: (result: FetchItemsResult) =>
+    ({
+      type: ActionType.FETCH_ITEMS_SUCCEED as typeof ActionType.FETCH_ITEMS_SUCCEED,
+      payload: { result },
+    } as const),
 
-  fail: (error: AxiosError) => ({
-    type: ActionType.FETCH_ITEMS_FAIL as typeof ActionType.FETCH_ITEMS_FAIL,
-    payload: { error },
-    error: true,
-  }),
+  fail: (error: AxiosError) =>
+    ({
+      type: ActionType.FETCH_ITEMS_FAIL as typeof ActionType.FETCH_ITEMS_FAIL,
+      payload: { error },
+      error: true,
+    } as const),
+};
+
+interface PostItemResult {
+  item: ItemModel;
+}
+
+export const postItem = {
+  start: (params: ItemModel) =>
+    ({
+      type: ActionType.POST_ITEM_START as typeof ActionType.POST_ITEM_START,
+      payload: params,
+    } as const),
+
+  succeed: (result: PostItemResult) =>
+    ({
+      type: ActionType.POST_ITEM_SUCCEED as typeof ActionType.POST_ITEM_SUCCEED,
+      payload: { result },
+    } as const),
+
+  fail: (error: AxiosError) =>
+    ({
+      type: ActionType.POST_ITEM_FAIL as typeof ActionType.POST_ITEM_FAIL,
+      payload: { error },
+      error: true,
+    } as const),
 };
 
 export type ItemAction =
-  | ReturnType<typeof fetchItems.start>
-  | ReturnType<typeof fetchItems.succeed>
-  | ReturnType<typeof fetchItems.fail>;
+  | ReturnType<typeof fetchAllItems.start>
+  | ReturnType<typeof fetchAllItems.succeed>
+  | ReturnType<typeof fetchAllItems.fail>
+  | ReturnType<typeof postItem.start>
+  | ReturnType<typeof postItem.succeed>
+  | ReturnType<typeof postItem.fail>;

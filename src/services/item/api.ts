@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { EXPO_MAIN_API_BASE_URL } from 'react-native-dotenv';
 
-import { Item } from './models';
+import { ItemModel } from './models';
 
 interface ApiConfig {
   baseURL: string;
@@ -8,25 +9,31 @@ interface ApiConfig {
 }
 
 const DEFAULT_API_CONFIG: ApiConfig = {
-  baseURL: 'http://localhost:8080',
+  baseURL: EXPO_MAIN_API_BASE_URL,
   timeout: 10000,
 };
 
-export const fetchItemsFactory = (optionConfig?: ApiConfig) => {
+const createAxiosInstance = (optionConfig?: ApiConfig) => {
   const config = {
     ...DEFAULT_API_CONFIG,
     ...optionConfig,
   };
   const instance = axios.create(config);
 
+  return instance;
+};
+
+export const fetchItemsApi = (optionConfig?: ApiConfig) => {
+  const instance = createAxiosInstance(optionConfig);
+
   const fetchItems = async () => {
     try {
       const response = await instance.get('/items');
 
       if (response.status !== 200) {
-        throw new Error('Server Error');
+        throw new Error('URI not found or Server Error');
       }
-      const items: Item[] = response.data;
+      const items: ItemModel[] = response.data;
 
       return items;
     } catch (err) {
@@ -35,4 +42,25 @@ export const fetchItemsFactory = (optionConfig?: ApiConfig) => {
   };
 
   return fetchItems;
+};
+
+export const postItemApi = (params: ItemModel, optionConfig?: ApiConfig) => {
+  const instance = createAxiosInstance(optionConfig);
+
+  const postItem = async () => {
+    try {
+      const response = await instance.post('/item', params);
+
+      if (response.status !== 200) {
+        throw new Error('URI not found or Server Error');
+      }
+      const item: ItemModel = response.data;
+
+      return item;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  return postItem;
 };

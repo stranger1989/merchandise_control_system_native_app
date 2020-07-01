@@ -1,24 +1,37 @@
 import { all, call, fork, put, takeLatest } from 'redux-saga/effects';
 
 import * as Action from '../actions/itemConstants';
-import { fetchItems } from '../actions/item';
-import { fetchItemsFactory } from '../services/item/api';
+import * as actions from '../actions/item';
+import { fetchItemsApi, postItemApi } from '../services/item/api';
 
-function* runFetchItems() {
+function* fetchAllItems() {
   try {
-    const api = fetchItemsFactory();
+    const api = fetchItemsApi();
     const items = yield call(api);
 
-    yield put(fetchItems.succeed({ items }));
+    yield put(actions.fetchAllItems.succeed({ items }));
   } catch (error) {
-    yield put(fetchItems.fail(error));
+    yield put(actions.fetchAllItems.fail(error));
   }
 }
-
 export function* watchFetchItems() {
-  yield takeLatest(Action.FETCH_ITEMS_START, runFetchItems);
+  yield takeLatest(Action.FETCH_ITEMS_START, fetchAllItems);
+}
+
+function* postItem(action: ReturnType<typeof actions.postItem.start>) {
+  try {
+    const api = postItemApi(action.payload);
+    const item = yield call(api);
+
+    yield put(actions.postItem.succeed({ item }));
+  } catch (error) {
+    yield put(actions.postItem.fail(error));
+  }
+}
+export function* watchPostItem() {
+  yield takeLatest(Action.POST_ITEM_START, postItem);
 }
 
 export default function* rootSaga() {
-  yield all([fork(watchFetchItems)]);
+  yield all([fork(watchFetchItems), fork(watchPostItem)]);
 }
