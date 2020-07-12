@@ -1,11 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { SFC, useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import { Header, Left, Button, Icon, Title, Right, Body } from 'native-base';
 import { NavigationParams } from 'react-navigation';
 
-const HeaderComponent: FC<{
+interface HeaderComponentProps {
   navigation: NavigationParams;
-}> = ({ navigation }) => {
+}
+
+const HeaderComponent: SFC<HeaderComponentProps> = ({ navigation }) => {
   const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {

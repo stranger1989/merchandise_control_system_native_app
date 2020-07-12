@@ -10,9 +10,11 @@ import {
   NavigationParams,
 } from 'react-navigation';
 
-const AccountScreen: FC<{
+interface AccountScreenProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-}> = ({ navigation }) => {
+}
+
+const AccountScreen: FC<AccountScreenProps> = ({ navigation }) => {
   return (
     <Container>
       <HeaderComponent navigation={navigation} />

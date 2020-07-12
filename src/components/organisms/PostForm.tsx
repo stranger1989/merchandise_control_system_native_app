@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { SFC } from 'react';
 import {
   Field,
   reduxForm,
@@ -21,11 +21,17 @@ import {
 } from 'native-base';
 import { ItemModel } from '../../services/item/models';
 
-const renderInput: FC<{
+interface renderInputProps {
   input: TextInputProps;
   label: string;
   meta: FieldArrayMetaProps;
-}> = ({ input, label, meta: { error } }) => {
+}
+
+const renderInput: SFC<renderInputProps> = ({
+  input,
+  label,
+  meta: { error },
+}) => {
   let hasError = false;
   if (error !== undefined) {
     hasError = true;
@@ -40,7 +46,7 @@ const renderInput: FC<{
   );
 };
 
-const renderSelectField: React.FC<{ input: TextInputProps; label: string }> = ({
+const renderSelectField: React.SFC<renderInputProps> = ({
   input,
   label,
   children,
@@ -63,11 +69,7 @@ const renderSelectField: React.FC<{ input: TextInputProps; label: string }> = ({
   </>
 );
 
-const renderDateField: FC<{ input: TextInputProps; label: string }> = ({
-  input,
-  label,
-  children,
-}) => (
+const renderDateField: SFC<renderInputProps> = ({ input, label, children }) => (
   <>
     <Item>
       <DatePicker
@@ -93,7 +95,7 @@ interface ReduxFormExtendProps {
   submitFunction: (params: ItemModel) => void;
 }
 
-const PostForm: FC<
+const PostForm: SFC<
   InjectedFormProps<ItemModel, ReduxFormExtendProps> & ReduxFormExtendProps
 > = ({ submitFunction, handleSubmit }) => {
   return (
