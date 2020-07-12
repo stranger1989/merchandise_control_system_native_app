@@ -1,6 +1,6 @@
 import { AxiosError } from 'axios';
 
-import { ItemModel } from '../services/item/models';
+import { ItemId, ItemModel } from '../services/item/models';
 import * as ActionType from './itemConstants';
 
 interface FetchItemsResult {
@@ -52,10 +52,38 @@ export const postItem = {
     } as const),
 };
 
+interface DeleteItemResult {
+  item: ItemId;
+}
+
+export const deleteItem = {
+  start: (itemId: number) =>
+    ({
+      type: ActionType.DELETE_ITEM_START as typeof ActionType.DELETE_ITEM_START,
+      payload: itemId,
+    } as const),
+
+  succeed: (result: DeleteItemResult) =>
+    ({
+      type: ActionType.DELETE_ITEM_SUCCEED as typeof ActionType.DELETE_ITEM_SUCCEED,
+      payload: { result },
+    } as const),
+
+  fail: (error: AxiosError) =>
+    ({
+      type: ActionType.DELETE_ITEM_FAIL as typeof ActionType.DELETE_ITEM_FAIL,
+      payload: { error },
+      error: true,
+    } as const),
+};
+
 export type ItemAction =
   | ReturnType<typeof fetchAllItems.start>
   | ReturnType<typeof fetchAllItems.succeed>
   | ReturnType<typeof fetchAllItems.fail>
   | ReturnType<typeof postItem.start>
   | ReturnType<typeof postItem.succeed>
-  | ReturnType<typeof postItem.fail>;
+  | ReturnType<typeof postItem.fail>
+  | ReturnType<typeof deleteItem.start>
+  | ReturnType<typeof deleteItem.succeed>
+  | ReturnType<typeof deleteItem.fail>;

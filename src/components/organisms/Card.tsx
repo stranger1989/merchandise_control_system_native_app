@@ -14,9 +14,10 @@ import { ItemModel } from '../../services/item/models';
 
 interface CardComponentProps {
   item: ItemModel;
+  deleteItem: (itemId: number) => void;
 }
 
-const CardComponent: SFC<CardComponentProps> = ({ item }) => {
+const CardComponent: SFC<CardComponentProps> = ({ item, deleteItem }) => {
   return (
     <Card>
       <CardItem>
@@ -46,7 +47,9 @@ const CardComponent: SFC<CardComponentProps> = ({ item }) => {
           </Button>
         </Body>
         <Right>
-          <Text>user name</Text>
+          <Button transparent onPress={() => deleteItem(item.id)}>
+            <Icon active name="trash" style={{ fontSize: 30, color: 'gray' }} />
+          </Button>
         </Right>
       </CardItem>
     </Card>
