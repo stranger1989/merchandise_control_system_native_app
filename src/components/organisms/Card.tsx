@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { SFC } from 'react';
 import {
   Card,
   CardItem,
@@ -12,9 +12,11 @@ import {
 } from 'native-base';
 import { ItemModel } from '../../services/item/models';
 
-const CardComponent: FC<{
+interface CardComponentProps {
   item: ItemModel;
-}> = ({ item }) => {
+}
+
+const CardComponent: SFC<CardComponentProps> = ({ item }) => {
   return (
     <Card>
       <CardItem>

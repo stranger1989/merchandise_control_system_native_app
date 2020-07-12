@@ -23,10 +23,12 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     dispatch,
   );
 
-const AddScreen: FC<{
+interface AddScreenProps {
   postItemStart: (params: ItemModel) => void;
   navigation: NavigationParams;
-}> = ({ postItemStart, navigation }) => {
+}
+
+const AddScreen: FC<AddScreenProps> = ({ postItemStart, navigation }) => {
   const submit = (values: ItemModel) => {
     alert(`here is the value ${JSON.stringify(values)}`);
     postItemStart(values);

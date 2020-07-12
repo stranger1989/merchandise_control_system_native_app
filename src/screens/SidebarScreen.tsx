@@ -8,9 +8,11 @@ import {
   NavigationParams,
 } from 'react-navigation';
 
-const SideBar: FC<{
+interface SideBarProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
-}> = ({ navigation }) => {
+}
+
+const SideBar: FC<SideBarProps> = ({ navigation }) => {
   return (
     <Container>
       <Content>

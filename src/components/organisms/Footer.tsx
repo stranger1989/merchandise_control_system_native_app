@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { SFC } from 'react';
 import { Footer, FooterTab, Button, Icon, Text } from 'native-base';
 import {
   NavigationScreenProp,
@@ -6,10 +6,15 @@ import {
   NavigationParams,
 } from 'react-navigation';
 
-const FooterComponent: FC<{
+interface HeaderComponentProps {
   navigation: NavigationScreenProp<NavigationState, NavigationParams>;
   navigationIndex: number;
-}> = ({ navigation, navigationIndex = 0 }) => {
+}
+
+const FooterComponent: SFC<HeaderComponentProps> = ({
+  navigation,
+  navigationIndex = 0,
+}) => {
   return (
     <Footer>
       <FooterTab>
