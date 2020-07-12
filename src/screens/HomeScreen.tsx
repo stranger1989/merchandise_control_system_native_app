@@ -26,17 +26,34 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     dispatch,
   );
 
-const HomeScreen: FC<{
+interface HomeScreenProps {
   items: ItemModel[];
   isLoading: boolean;
   fetchItemsStart: () => void;
   navigation: NavigationParams;
-}> = ({ items, isLoading, fetchItemsStart, navigation }) => {
+}
+
+const HomeScreen: FC<HomeScreenProps> = ({
+  items,
+  isLoading,
+  fetchItemsStart,
+  navigation,
+}) => {
   useEffect(() => {
     (async () => {
       await fetchItemsStart();
     })();
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('willFocus', () => {
+      (async () => {
+        await fetchItemsStart();
+      })();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
