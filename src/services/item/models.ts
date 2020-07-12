@@ -1,4 +1,8 @@
-export interface ItemModel {
+export interface ItemId {
+  id: number;
+}
+
+export interface ItemModel extends ItemId {
   jan_code: string;
   item_name: string;
   price: number;
