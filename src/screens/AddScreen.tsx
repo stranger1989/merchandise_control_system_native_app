@@ -2,7 +2,8 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Container } from 'native-base';
-import { NavigationParams } from 'react-navigation';
+
+import { ScreenNavigationProp } from '../navigators/index';
 
 import { postItem } from '../actions/item';
 import store from '../store/configureStore';
@@ -25,19 +26,33 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
 
 interface AddScreenProps {
   postItemStart: (params: ItemModel) => void;
-  navigation: NavigationParams;
+  navigation: ScreenNavigationProp;
 }
 
 const AddScreen: FC<AddScreenProps> = ({ postItemStart, navigation }) => {
   const submit = (values: ItemModel) => {
-    alert(`here is the value ${JSON.stringify(values)}`);
-    postItemStart(values);
+    const convertValues = {
+      ...values,
+      price: Number(values.price) ?? 0,
+      stock: Number(values.stock) ?? 0,
+      discontinued: Boolean(values.discontinued) ?? false,
+    };
+    alert(`here is the value ${JSON.stringify(convertValues)}`);
+    postItemStart(convertValues);
   };
 
   return (
     <Container>
       <HeaderComponent navigation={navigation} />
-      <PostFormComponent submitFunction={submit} />
+      <PostFormComponent
+        submitFunction={submit}
+        initialValues={{
+          category_id: 0,
+          series_id: 0,
+          discontinued: false,
+          release_date: new Date(),
+        }}
+      />
     </Container>
   );
 };

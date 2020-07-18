@@ -12,6 +12,7 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
+    "@react-native-community/datetimepicker": "^2.6.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.7.1",
     "@react-navigation/drawer": "^5.8.5",

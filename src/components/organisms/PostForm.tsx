@@ -4,8 +4,9 @@ import {
   reduxForm,
   FieldArrayMetaProps,
   InjectedFormProps,
+  FormErrors,
 } from 'redux-form';
-import { View, TextInputProps } from 'react-native';
+import { View, TextInputProps, KeyboardType } from 'react-native';
 import {
   Container,
   Content,
@@ -17,19 +18,64 @@ import {
   Label,
   Picker,
   Icon,
-  DatePicker,
 } from 'native-base';
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { ItemModel } from '../../services/item/models';
+
+interface formErrorsProps {
+  jan_code: string;
+  item_name: string;
+  price: string;
+  stock: string;
+}
+
+const validate = (values: FormErrors<formErrorsProps>) => {
+  const error = {} as FormErrors<formErrorsProps>;
+  if (values.jan_code === undefined) {
+    error.jan_code = "jan code isn't allowed blank";
+  }
+
+  if (values.item_name === undefined) {
+    error.item_name = "item name isn't allowed blank";
+  }
+
+  if (values.price === undefined) {
+    error.price = "price isn't allowed blank";
+  }
+
+  if (values.stock === undefined) {
+    error.stock = "item name isn't allowed blank";
+  }
+
+  const reg = /^\d+$/;
+
+  if (!reg.test(values.jan_code) && error.jan_code === '') {
+    error.jan_code = 'jan code should be numeric';
+  }
+
+  if (!reg.test(values.price) && error.price === '') {
+    error.price = 'price should be numeric';
+  }
+
+  if (!reg.test(values.stock) && error.stock === '') {
+    error.stock = 'stock should be numeric';
+  }
+
+  return error;
+};
 
 interface renderInputProps {
   input: TextInputProps;
   label: string;
+  type: KeyboardType;
   meta: FieldArrayMetaProps;
 }
 
 const renderInput: SFC<renderInputProps> = ({
   input,
   label,
+  type,
   meta: { error },
 }) => {
   let hasError = false;
@@ -38,10 +84,14 @@ const renderInput: SFC<renderInputProps> = ({
   }
 
   return (
-    <Item error={hasError} fixedLabel>
+    <Item error={hasError} success={!hasError} fixedLabel>
       <Label>{label}</Label>
-      <Input {...input} />
-      {hasError ? <Text>{error}</Text> : <Text />}
+      <Input {...input} keyboardType={type} />
+      {hasError ? (
+        <Icon name="close-circle" />
+      ) : (
+        <Icon name="checkmark-circle" />
+      )}
     </Item>
   );
 };
@@ -53,6 +103,7 @@ const renderSelectField: React.SFC<renderInputProps> = ({
 }) => (
   <>
     <Item>
+      <Label>{label}</Label>
       <Picker
         mode="dropdown"
         iosIcon={<Icon name="arrow-down" />}
@@ -72,22 +123,20 @@ const renderSelectField: React.SFC<renderInputProps> = ({
 const renderDateField: SFC<renderInputProps> = ({ input, label, children }) => (
   <>
     <Item>
-      <DatePicker
-        defaultDate={new Date(2020, 1, 1)}
-        minimumDate={new Date(2000, 1, 1)}
-        locale={'ja'}
-        timeZoneOffsetInMinutes={undefined}
-        modalTransparent={false}
-        animationType={'fade'}
-        androidMode={'default'}
-        placeHolderText={label}
-        textStyle={{ color: 'blue' }}
-        placeHolderTextStyle={{ color: '#d3d3d3' }}
-        onDateChange={input.onChange}
-        disabled={false}
+      <Label>{label}</Label>
+    </Item>
+    <View>
+      <DateTimePicker
+        testID="dateTimePicker"
+        value={input.value}
+        mode={'date'}
+        is24Hour={true}
+        display="default"
+        onChange={input.onChange}
+        // locale={'ja'}
       />
       {children}
-    </Item>
+    </View>
   </>
 );
 
@@ -97,24 +146,33 @@ interface ReduxFormExtendProps {
 
 const PostForm: SFC<
   InjectedFormProps<ItemModel, ReduxFormExtendProps> & ReduxFormExtendProps
-> = ({ submitFunction, handleSubmit }) => {
+> = ({ submitFunction, handleSubmit, reset, invalid, dirty }) => {
   return (
     <Container>
       <Content padder style={{ width: '100%' }}>
         <Form>
-          <Field name="jan_code" label="Jan Code" component={renderInput} />
-          <View style={{ height: 20, width: 350, flex: 1 }}></View>
-          <Field name="item_name" label="Item Name" component={renderInput} />
+          <Field
+            name="jan_code"
+            type="number-pad"
+            label="Jan Code"
+            component={renderInput}
+          />
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
           <Field
-            parse={(value: string) => Number(value)}
+            name="item_name"
+            type="default"
+            label="Item Name"
+            component={renderInput}
+          />
+          <View style={{ height: 20, width: 350, flex: 1 }}></View>
+          <Field
             name="price"
+            type="number-pad"
             label="Price"
             component={renderInput}
           />
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
           <Field
-            parse={(value: string) => Number(value)}
             name="category_id"
             label="Category"
             component={renderSelectField}
@@ -123,25 +181,19 @@ const PostForm: SFC<
             <Picker.Item label="private" value={1} />
           </Field>
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
-          <Field
-            parse={(value: string) => Number(value)}
-            name="series_id"
-            label="Series"
-            component={renderSelectField}
-          >
+          <Field name="series_id" label="Series" component={renderSelectField}>
             <Picker.Item label="public" value={0} />
             <Picker.Item label="private" value={1} />
           </Field>
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
           <Field
-            parse={(value: string) => Number(value)}
             name="stock"
+            type="number-pad"
             label="Stock"
             component={renderInput}
           />
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
           <Field
-            parse={(value: string) => Boolean(value)}
             name="discontinued"
             label="Discontinued"
             component={renderSelectField}
@@ -156,9 +208,18 @@ const PostForm: SFC<
             component={renderDateField}
           ></Field>
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
-          <Button block onPress={handleSubmit(submitFunction)}>
+          <Button
+            block
+            onPress={handleSubmit(submitFunction)}
+            disabled={invalid}
+          >
             <Text>Submit</Text>
           </Button>
+          <View style={{ height: 20, width: 350, flex: 1 }}></View>
+          <Button block onPress={reset} disabled={!dirty}>
+            <Text>Reset</Text>
+          </Button>
+          <View style={{ height: 20, width: 350, flex: 1 }}></View>
         </Form>
       </Content>
     </Container>
@@ -167,4 +228,5 @@ const PostForm: SFC<
 
 export default reduxForm<ItemModel, ReduxFormExtendProps>({
   form: 'itemForm',
+  validate,
 })(PostForm);
