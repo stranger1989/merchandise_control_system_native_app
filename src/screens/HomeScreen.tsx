@@ -2,7 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Container, Content, Spinner } from 'native-base';
-import { NavigationParams } from 'react-navigation';
+
+import { ScreenNavigationProp } from '../navigators/index';
 
 import store from '../store/configureStore';
 import { fetchAllItems, deleteItem } from '../actions/item';
@@ -32,7 +33,7 @@ interface HomeScreenProps {
   isLoading: boolean;
   fetchItemsStart: () => void;
   deleteItemStart: (itemId: number) => { payload: number };
-  navigation: NavigationParams;
+  navigation: ScreenNavigationProp;
 }
 
 const HomeScreen: FC<HomeScreenProps> = ({
@@ -51,7 +52,7 @@ const HomeScreen: FC<HomeScreenProps> = ({
   }, []);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('willFocus', () => {
+    const unsubscribe = navigation.addListener('focus', () => {
       (async () => {
         await fetchItemsStart();
       })();

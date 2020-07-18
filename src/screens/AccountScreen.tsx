@@ -2,16 +2,12 @@ import React, { FC } from 'react';
 // import { connect } from 'react-redux';
 import { Container } from 'native-base';
 
+import { ScreenNavigationProp } from '../navigators/index';
+
 import HeaderComponent from '../components/organisms/Header';
 
-import {
-  NavigationScreenProp,
-  NavigationState,
-  NavigationParams,
-} from 'react-navigation';
-
 interface AccountScreenProps {
-  navigation: NavigationScreenProp<NavigationState, NavigationParams>;
+  navigation: ScreenNavigationProp;
 }
 
 const AccountScreen: FC<AccountScreenProps> = ({ navigation }) => {
