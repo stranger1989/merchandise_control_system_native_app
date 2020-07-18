@@ -1,10 +1,10 @@
 import React, { SFC, useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import { Header, Left, Button, Icon, Title, Right, Body } from 'native-base';
-import { NavigationParams } from 'react-navigation';
+import { ScreenNavigationProp } from '../../navigators/index';
 
 interface HeaderComponentProps {
-  navigation: NavigationParams;
+  navigation: ScreenNavigationProp;
 }
 
 const HeaderComponent: SFC<HeaderComponentProps> = ({ navigation }) => {
