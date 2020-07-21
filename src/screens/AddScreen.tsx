@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { Container } from 'native-base';
+import { change } from 'redux-form';
 
 import { ScreenNavigationProp } from '../navigators/index';
 
@@ -20,16 +21,22 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       postItemStart: (params: ItemModel) => postItem.start(params),
+      change: (field: string, data: Date) => change('itemForm', field, data),
     },
     dispatch,
   );
 
 interface AddScreenProps {
   postItemStart: (params: ItemModel) => void;
+  change: (field: string, data: Date) => void;
   navigation: ScreenNavigationProp;
 }
 
-const AddScreen: FC<AddScreenProps> = ({ postItemStart, navigation }) => {
+const AddScreen: FC<AddScreenProps> = ({
+  postItemStart,
+  change,
+  navigation,
+}) => {
   const submit = (values: ItemModel) => {
     const convertValues = {
       ...values,
@@ -46,6 +53,7 @@ const AddScreen: FC<AddScreenProps> = ({ postItemStart, navigation }) => {
       <HeaderComponent navigation={navigation} />
       <PostFormComponent
         submitFunction={submit}
+        change={change}
         initialValues={{
           category_id: 0,
           series_id: 0,
