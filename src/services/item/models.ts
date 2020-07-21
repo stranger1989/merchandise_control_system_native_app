@@ -10,5 +10,5 @@ export interface ItemModel extends ItemId {
   series_id: number;
   stock: number;
   discontinued: boolean;
-  release_date: string;
+  release_date: Date;
 }

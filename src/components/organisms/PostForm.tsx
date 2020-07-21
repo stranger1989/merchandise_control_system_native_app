@@ -1,4 +1,4 @@
-import React, { SFC } from 'react';
+import React, { SFC, FC, useState } from 'react';
 import {
   Field,
   reduxForm,
@@ -19,21 +19,23 @@ import {
   Picker,
   Icon,
 } from 'native-base';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  AndroidNativeProps,
+  IOSNativeProps,
+} from '@react-native-community/datetimepicker';
 
 import { ItemModel } from '../../services/item/models';
 
-interface formErrorsProps {
-  jan_code: string;
-  item_name: string;
-  price: string;
-  stock: string;
-}
+const validate = (values: ItemModel) => {
+  const error = {} as FormErrors<ItemModel>;
 
-const validate = (values: FormErrors<formErrorsProps>) => {
-  const error = {} as FormErrors<formErrorsProps>;
+  const reg = /^\d+$/;
   if (values.jan_code === undefined) {
     error.jan_code = "jan code isn't allowed blank";
+  } else {
+    if (!reg.test(values.jan_code) && error.jan_code === '') {
+      error.jan_code = 'jan code should be numeric';
+    }
   }
 
   if (values.item_name === undefined) {
@@ -42,24 +44,18 @@ const validate = (values: FormErrors<formErrorsProps>) => {
 
   if (values.price === undefined) {
     error.price = "price isn't allowed blank";
+  } else {
+    if (!reg.test(String(values.price)) && error.price === '') {
+      error.price = 'price should be numeric';
+    }
   }
 
   if (values.stock === undefined) {
     error.stock = "item name isn't allowed blank";
-  }
-
-  const reg = /^\d+$/;
-
-  if (!reg.test(values.jan_code) && error.jan_code === '') {
-    error.jan_code = 'jan code should be numeric';
-  }
-
-  if (!reg.test(values.price) && error.price === '') {
-    error.price = 'price should be numeric';
-  }
-
-  if (!reg.test(values.stock) && error.stock === '') {
-    error.stock = 'stock should be numeric';
+  } else {
+    if (!reg.test(String(values.stock)) && error.stock === '') {
+      error.stock = 'stock should be numeric';
+    }
   }
 
   return error;
@@ -120,33 +116,59 @@ const renderSelectField: React.SFC<renderInputProps> = ({
   </>
 );
 
-const renderDateField: SFC<renderInputProps> = ({ input, label, children }) => (
-  <>
-    <Item>
-      <Label>{label}</Label>
-    </Item>
-    <View>
-      <DateTimePicker
-        testID="dateTimePicker"
-        value={input.value}
-        mode={'date'}
-        is24Hour={true}
-        display="default"
-        onChange={input.onChange}
-        // locale={'ja'}
-      />
-      {children}
-    </View>
-  </>
-);
+interface dateInputProps {
+  input: IOSNativeProps | AndroidNativeProps;
+  label: string;
+  type: KeyboardType;
+  meta: FieldArrayMetaProps;
+  setShow: (isShowPicker: boolean) => void;
+  change: (field: string, data: Date) => void;
+}
+
+const renderDateField: SFC<dateInputProps> = ({
+  input,
+  label,
+  setShow,
+  change,
+}) => {
+  const customOnChange = (event: any, selectedDate: Date | undefined) => {
+    const currentDate = selectedDate || input.value;
+
+    change('release_date', currentDate);
+    setShow(true);
+  };
+
+  return (
+    <>
+      <Item>
+        <Label>{label}</Label>
+      </Item>
+      <View>
+        <DateTimePicker
+          testID="dateTimePicker"
+          timeZoneOffsetInMinutes={0}
+          value={input.value}
+          mode={'date'}
+          is24Hour={true}
+          display="default"
+          onChange={customOnChange}
+          locale={'ja'}
+        />
+      </View>
+    </>
+  );
+};
 
 interface ReduxFormExtendProps {
   submitFunction: (params: ItemModel) => void;
+  change: (field: string, data: Date) => void;
 }
 
-const PostForm: SFC<
+const PostForm: FC<
   InjectedFormProps<ItemModel, ReduxFormExtendProps> & ReduxFormExtendProps
-> = ({ submitFunction, handleSubmit, reset, invalid, dirty }) => {
+> = ({ submitFunction, change, handleSubmit, reset, invalid, dirty }) => {
+  const [show, setShow] = useState(false);
+
   return (
     <Container>
       <Content padder style={{ width: '100%' }}>
@@ -202,11 +224,28 @@ const PostForm: SFC<
             <Picker.Item label="No" value={false} />
           </Field>
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
-          <Field
-            name="release_date"
-            label="Release Date"
-            component={renderDateField}
-          ></Field>
+          {!show ? (
+            <Button block onPress={() => setShow(true)}>
+              <Text>Show Date Picker</Text>
+            </Button>
+          ) : (
+            <Button block onPress={() => setShow(false)}>
+              <Text>Close Date Picker</Text>
+            </Button>
+          )}
+          {show && (
+            <>
+              <View style={{ height: 20, width: 350, flex: 1 }}></View>
+              <Field
+                name="release_date"
+                label="Release Date"
+                type="date"
+                setShow={setShow}
+                change={change}
+                component={renderDateField}
+              ></Field>
+            </>
+          )}
           <View style={{ height: 20, width: 350, flex: 1 }}></View>
           <Button
             block
