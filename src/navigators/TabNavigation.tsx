@@ -1,14 +1,50 @@
 import React, { FC } from 'react';
+import {
+  NavigationProp,
+  RouteProp,
+  CompositeNavigationProp,
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import HomeScreen from '../screens/HomeScreen';
-import AddScreen from '../screens/AddScreen';
-import AccountScreen from '../screens/AccountScreen';
+import StackNavigation from './StackNavigation';
+import { ItemModel } from '../services/item/models';
+
+export type RootStackParamList = {
+  Warehouse: undefined;
+  ItemPost: { item: ItemModel };
+  ItemUpdate: undefined;
+  Account: undefined;
+};
+
+export interface ScreenNavigationProp {
+  navigation: CompositeNavigationProp<
+    NavigationProp<RootStackParamList, keyof RootStackParamList>,
+    StackNavigationProp<RootStackParamList, keyof RootStackParamList>
+  >;
+  route: RouteProp<RootStackParamList, keyof RootStackParamList>;
+}
+
+const HomeStackNavigation = (props: ScreenNavigationProp) => (
+  <StackNavigation screenName={'Warehouse'} {...props} />
+);
+
+const ItemPostStackNavigation = (props: ScreenNavigationProp) => (
+  <StackNavigation screenName={'Sales'} {...props} />
+);
+
+const AccountStackNavigation = (props: ScreenNavigationProp) => (
+  <StackNavigation screenName={'Account'} {...props} />
+);
 
 const Tab = createBottomTabNavigator();
 
-const TabNavigator: FC<{ screenName: string }> = ({ screenName }) => {
+interface TabNavigatorProps {
+  screenName: string;
+}
+
+const TabNavigator: FC<TabNavigatorProps> = ({ screenName }) => {
   return (
     <Tab.Navigator
       initialRouteName={screenName}
@@ -17,31 +53,39 @@ const TabNavigator: FC<{ screenName: string }> = ({ screenName }) => {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="Warehouse"
+        component={HomeStackNavigation}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Warehouse',
           // eslint-disable-next-line react/display-name
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="home" color={color} size={size} />
+            <MaterialCommunityIcons
+              name="warehouse"
+              color={color}
+              size={size}
+            />
           ),
         }}
       />
       <Tab.Screen
-        name="Add"
-        component={AddScreen}
+        name="Sales"
+        component={ItemPostStackNavigation}
         options={{
-          tabBarLabel: 'New Item',
+          tabBarLabel: 'Sales',
           // eslint-disable-next-line react/display-name
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="pencil" color={color} size={size} />
+            <MaterialCommunityIcons
+              name="chart-bar"
+              color={color}
+              size={size}
+            />
           ),
           // tabBarBadge: 2,
         }}
       />
       <Tab.Screen
         name="Account"
-        component={AccountScreen}
+        component={AccountStackNavigation}
         options={{
           tabBarLabel: 'Profile',
           // eslint-disable-next-line react/display-name

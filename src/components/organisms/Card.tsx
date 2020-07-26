@@ -12,12 +12,21 @@ import {
 } from 'native-base';
 import { ItemModel } from '../../services/item/models';
 
-interface CardComponentProps {
+import {
+  ScreenNavigationProp,
+  RootStackParamList,
+} from '../../navigators/TabNavigation';
+
+interface CardComponentProps extends ScreenNavigationProp {
   item: ItemModel;
   deleteItem: (itemId: number) => void;
 }
 
-const CardComponent: SFC<CardComponentProps> = ({ item, deleteItem }) => {
+const CardComponent: SFC<CardComponentProps> = ({
+  item,
+  navigation,
+  deleteItem,
+}) => {
   return (
     <Card>
       <CardItem>
@@ -41,9 +50,20 @@ const CardComponent: SFC<CardComponentProps> = ({ item, deleteItem }) => {
           </Button>
         </Left>
         <Body>
-          <Button transparent>
-            <Icon active name="chatbubbles" />
-            <Text>0 Comments</Text>
+          <Button
+            transparent
+            onPress={() => {
+              navigation.push('ItemUpdate' as keyof RootStackParamList, {
+                item,
+              });
+            }}
+          >
+            <Icon
+              active
+              name="edit"
+              style={{ fontSize: 25, color: 'gray' }}
+              type="MaterialIcons"
+            />
           </Button>
         </Body>
         <Right>

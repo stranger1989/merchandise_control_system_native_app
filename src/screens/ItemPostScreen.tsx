@@ -4,16 +4,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { Container } from 'native-base';
 import { change } from 'redux-form';
 
-import { ScreenNavigationProp } from '../navigators/index';
+import { ScreenNavigationProp } from '../navigators/TabNavigation';
 
 import { postItem } from '../actions/item';
-import store from '../store/configureStore';
+import { AllState } from '../store/configureStore';
 import { ItemModel } from '../services/item/models';
 
-import HeaderComponent from '../components/organisms/Header';
-import PostFormComponent from '../components/organisms/PostForm';
-
-type AllState = ReturnType<typeof store.getState>;
+import ItemFormComponent from '../components/organisms/ItemForm';
 
 const mapStateToProps = (state: AllState) => ({});
 
@@ -26,13 +23,12 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     dispatch,
   );
 
-interface AddScreenProps {
+interface ItemPostScreenProps extends ScreenNavigationProp {
   postItemStart: (params: ItemModel) => void;
   change: (field: string, data: Date) => void;
-  navigation: ScreenNavigationProp;
 }
 
-const AddScreen: FC<AddScreenProps> = ({
+const ItemPostScreen: FC<ItemPostScreenProps> = ({
   postItemStart,
   change,
   navigation,
@@ -46,12 +42,12 @@ const AddScreen: FC<AddScreenProps> = ({
     };
     alert(`here is the value ${JSON.stringify(convertValues)}`);
     postItemStart(convertValues);
+    navigation.navigate('Warehouse');
   };
 
   return (
     <Container>
-      <HeaderComponent navigation={navigation} />
-      <PostFormComponent
+      <ItemFormComponent
         submitFunction={submit}
         change={change}
         initialValues={{
@@ -65,4 +61,4 @@ const AddScreen: FC<AddScreenProps> = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemPostScreen);

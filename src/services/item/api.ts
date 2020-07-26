@@ -65,17 +65,44 @@ export const postItemApi = (params: ItemModel, optionConfig?: ApiConfig) => {
   return postItem;
 };
 
-export const deleteItemApi = (itemId: number, optionConfig?: ApiConfig) => {
+export const deleteItemApi = (itemId: ItemId, optionConfig?: ApiConfig) => {
   const instance = createAxiosInstance(optionConfig);
 
   const deleteItem = async () => {
     try {
-      const response = await instance.delete(`/item/${itemId}`);
+      const response = await instance.delete(`/item/${itemId.id}`);
 
       if (response.status !== 200) {
         throw new Error('URI not found or Server Error');
       }
-      const item: ItemId = response.data;
+      const responseId: ItemId = response.data;
+
+      return responseId;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  return deleteItem;
+};
+
+export const updateItemApi = (
+  params: { params: ItemModel; itemId: ItemId },
+  optionConfig?: ApiConfig,
+) => {
+  const instance = createAxiosInstance(optionConfig);
+
+  const updateItem = async () => {
+    try {
+      const response = await instance.put(
+        `/item/${params.itemId.id}`,
+        params.params,
+      );
+
+      if (response.status !== 200) {
+        throw new Error('URI not found or Server Error');
+      }
+      const item: ItemModel = response.data;
 
       return item;
     } catch (err) {
@@ -83,5 +110,5 @@ export const deleteItemApi = (itemId: number, optionConfig?: ApiConfig) => {
     }
   };
 
-  return deleteItem;
+  return updateItem;
 };

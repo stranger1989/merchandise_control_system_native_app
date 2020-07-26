@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import { Provider } from 'react-redux';
+import { NavigationContainer } from '@react-navigation/native';
 import { registerRootComponent } from 'expo';
 
 import store from './store/configureStore';
 
-import AppNavigator from './navigators/index';
+import TabNavigation from './navigators/TabNavigation';
 import storybook from '../storybook/index';
 
 import { EXPO_START_ENV } from 'react-native-dotenv';
@@ -12,7 +13,9 @@ import { EXPO_START_ENV } from 'react-native-dotenv';
 const App: FC = () => {
   return (
     <Provider store={store}>
-      <AppNavigator />
+      <NavigationContainer>
+        <TabNavigation screenName="Home" />
+      </NavigationContainer>
     </Provider>
   );
 };

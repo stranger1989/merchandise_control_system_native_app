@@ -1,18 +1,18 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Container, Content, Spinner } from 'native-base';
+import { Container, Content, Spinner, Button, Text } from 'native-base';
 
-import { ScreenNavigationProp } from '../navigators/index';
+import {
+  ScreenNavigationProp,
+  RootStackParamList,
+} from '../navigators/TabNavigation';
 
-import store from '../store/configureStore';
+import { AllState } from '../store/configureStore';
 import { fetchAllItems, deleteItem } from '../actions/item';
-import { ItemModel } from '../services/item/models';
+import { ItemId, ItemModel } from '../services/item/models';
 
-import HeaderComponent from '../components/organisms/Header';
 import CardComponent from '../components/organisms/Card';
-
-type AllState = ReturnType<typeof store.getState>;
 
 const mapStateToProps = (state: AllState) => ({
   items: state.item.items,
@@ -23,17 +23,16 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       fetchItemsStart: () => fetchAllItems.start(),
-      deleteItemStart: (itemId: number) => deleteItem.start(itemId),
+      deleteItemStart: (itemId: ItemId) => deleteItem.start(itemId),
     },
     dispatch,
   );
 
-interface HomeScreenProps {
+interface HomeScreenProps extends ScreenNavigationProp {
   items: ItemModel[];
   isLoading: boolean;
   fetchItemsStart: () => void;
-  deleteItemStart: (itemId: number) => { payload: number };
-  navigation: ScreenNavigationProp;
+  deleteItemStart: (itemId: ItemId) => { payload: { id: number } };
 }
 
 const HomeScreen: FC<HomeScreenProps> = ({
@@ -42,9 +41,8 @@ const HomeScreen: FC<HomeScreenProps> = ({
   fetchItemsStart,
   deleteItemStart,
   navigation,
+  route,
 }) => {
-  const [itemsState, setItemsState] = useState<ItemModel[]>([]);
-
   useEffect(() => {
     (async () => {
       await fetchItemsStart();
@@ -61,30 +59,34 @@ const HomeScreen: FC<HomeScreenProps> = ({
     return unsubscribe;
   }, [navigation]);
 
-  useEffect(() => {
-    setItemsState(items);
-  }, [items]);
-
   const deleteItem = async (itemId: number) => {
     alert(`deleted ${itemId}`);
-    const deletedItemId = await deleteItemStart(itemId);
-    const newItems = [...itemsState].filter(
-      (item: ItemModel) => item.id !== deletedItemId.payload,
-    );
-    setItemsState(newItems);
+    await deleteItemStart({ id: itemId });
   };
 
   return (
     <>
       <Container>
-        <HeaderComponent navigation={navigation} />
         {isLoading ? (
           <Spinner color="blue" />
         ) : (
           <Content padder>
-            {itemsState.map((item: ItemModel, index: number) => (
-              <CardComponent key={index} item={item} deleteItem={deleteItem} />
+            {items.map((item: ItemModel, index: number) => (
+              <CardComponent
+                key={index}
+                item={item}
+                navigation={navigation}
+                deleteItem={deleteItem}
+                route={route}
+              />
             ))}
+            <Button
+              onPress={() =>
+                navigation.navigate('ItemPost' as keyof RootStackParamList)
+              }
+            >
+              <Text>New Item</Text>
+            </Button>
           </Content>
         )}
       </Container>

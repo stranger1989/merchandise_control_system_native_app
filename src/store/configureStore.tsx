@@ -27,4 +27,6 @@ const store = createStore(
 );
 
 sagaMiddleWare.run(rootSaga);
+
+export type AllState = ReturnType<typeof store.getState>;
 export default store;
