@@ -27,10 +27,6 @@ export const fetchAllItems = {
     } as const),
 };
 
-interface PostItemResult {
-  item: ItemModel;
-}
-
 export const postItem = {
   start: (params: ItemModel) =>
     ({
@@ -38,7 +34,7 @@ export const postItem = {
       payload: params,
     } as const),
 
-  succeed: (result: PostItemResult) =>
+  succeed: (result: FetchItemsResult) =>
     ({
       type: ActionType.POST_ITEM_SUCCEED as typeof ActionType.POST_ITEM_SUCCEED,
       payload: { result },
@@ -52,18 +48,14 @@ export const postItem = {
     } as const),
 };
 
-interface DeleteItemResult {
-  item: ItemId;
-}
-
 export const deleteItem = {
-  start: (itemId: number) =>
+  start: (itemId: ItemId) =>
     ({
       type: ActionType.DELETE_ITEM_START as typeof ActionType.DELETE_ITEM_START,
       payload: itemId,
     } as const),
 
-  succeed: (result: DeleteItemResult) =>
+  succeed: (result: FetchItemsResult) =>
     ({
       type: ActionType.DELETE_ITEM_SUCCEED as typeof ActionType.DELETE_ITEM_SUCCEED,
       payload: { result },
@@ -72,6 +64,27 @@ export const deleteItem = {
   fail: (error: AxiosError) =>
     ({
       type: ActionType.DELETE_ITEM_FAIL as typeof ActionType.DELETE_ITEM_FAIL,
+      payload: { error },
+      error: true,
+    } as const),
+};
+
+export const updateItem = {
+  start: (itemId: ItemId, params: ItemModel) =>
+    ({
+      type: ActionType.UPDATE_ITEM_START as typeof ActionType.UPDATE_ITEM_START,
+      payload: { itemId, params },
+    } as const),
+
+  succeed: (result: FetchItemsResult) =>
+    ({
+      type: ActionType.UPDATE_ITEM_SUCCEED as typeof ActionType.UPDATE_ITEM_SUCCEED,
+      payload: { result },
+    } as const),
+
+  fail: (error: AxiosError) =>
+    ({
+      type: ActionType.UPDATE_ITEM_FAIL as typeof ActionType.UPDATE_ITEM_FAIL,
       payload: { error },
       error: true,
     } as const),
@@ -86,4 +99,7 @@ export type ItemAction =
   | ReturnType<typeof postItem.fail>
   | ReturnType<typeof deleteItem.start>
   | ReturnType<typeof deleteItem.succeed>
-  | ReturnType<typeof deleteItem.fail>;
+  | ReturnType<typeof deleteItem.fail>
+  | ReturnType<typeof updateItem.start>
+  | ReturnType<typeof updateItem.succeed>
+  | ReturnType<typeof updateItem.fail>;

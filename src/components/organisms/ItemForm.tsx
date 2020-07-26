@@ -22,6 +22,7 @@ import {
 import DateTimePicker, {
   AndroidNativeProps,
   IOSNativeProps,
+  Event,
 } from '@react-native-community/datetimepicker';
 
 import { ItemModel } from '../../services/item/models';
@@ -82,7 +83,11 @@ const renderInput: SFC<renderInputProps> = ({
   return (
     <Item error={hasError} success={!hasError} fixedLabel>
       <Label>{label}</Label>
-      <Input {...input} keyboardType={type} />
+      <Input
+        {...input}
+        value={type === 'number-pad' ? String(input.value) : input.value}
+        keyboardType={type}
+      />
       {hasError ? (
         <Icon name="close-circle" />
       ) : (
@@ -131,7 +136,7 @@ const renderDateField: SFC<dateInputProps> = ({
   setShow,
   change,
 }) => {
-  const customOnChange = (event: any, selectedDate: Date | undefined) => {
+  const customOnChange = (_: Event, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || input.value;
 
     change('release_date', currentDate);
@@ -164,7 +169,7 @@ interface ReduxFormExtendProps {
   change: (field: string, data: Date) => void;
 }
 
-const PostForm: FC<
+const ItemForm: FC<
   InjectedFormProps<ItemModel, ReduxFormExtendProps> & ReduxFormExtendProps
 > = ({ submitFunction, change, handleSubmit, reset, invalid, dirty }) => {
   const [show, setShow] = useState(false);
@@ -268,4 +273,4 @@ const PostForm: FC<
 export default reduxForm<ItemModel, ReduxFormExtendProps>({
   form: 'itemForm',
   validate,
-})(PostForm);
+})(ItemForm);
