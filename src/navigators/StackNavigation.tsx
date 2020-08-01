@@ -1,5 +1,8 @@
-import React, { FC } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import React, { SFC } from 'react';
+import {
+  createStackNavigator,
+  StackHeaderProps,
+} from '@react-navigation/stack';
 
 import HomeScreen from '../screens/HomeScreen';
 import SalesScreen from '../screens/SalesScreen';
@@ -8,43 +11,59 @@ import AccountScreen from '../screens/AccountScreen';
 import ItemPostScreen from '../screens/ItemPostScreen';
 import ItemUpdateScreen from '../screens/ItemUpdateScreen';
 
+import Header from '../components/organisms/Header';
+
 const Stack = createStackNavigator();
 
-const HomeScreenRouter: FC<{ screenName: string }> = ({ screenName }) => {
+interface StackNavigatorProps {
+  screenName: string;
+}
+
+const StackNavigator: SFC<StackNavigatorProps> = ({ screenName }) => {
   return (
-    <Stack.Navigator
-      initialRouteName={screenName}
-      mode="modal"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: '#002F6C',
-          opacity: '0.9',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-          fontWeight: 'bold',
-        },
-      }}
-    >
-      <Stack.Screen name="Warehouse" component={HomeScreen} />
-      <Stack.Screen name="Sales" component={SalesScreen} />
-      <Stack.Screen name="ItemPost" component={ItemPostScreen} />
-      <Stack.Screen name="Account" component={AccountScreen} />
+    <Stack.Navigator initialRouteName={screenName} mode="modal">
+      <Stack.Screen
+        name="Warehouse"
+        component={HomeScreen}
+        options={{
+          header: (props: StackHeaderProps) => <Header {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="Sales"
+        component={SalesScreen}
+        options={{
+          header: (props: StackHeaderProps) => <Header {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          header: (props: StackHeaderProps) => <Header {...props} />,
+        }}
+      />
+      <Stack.Screen
+        name="ItemPost"
+        component={ItemPostScreen}
+        options={{
+          header: (props: StackHeaderProps) => (
+            <Header {...props} isGoBack={true} />
+          ),
+        }}
+      />
       <Stack.Screen
         name="ItemUpdate"
         component={ItemUpdateScreen}
         options={{
           cardShadowEnabled: true,
-          // eslint-disable-next-line react/display-name
-          // headerLeft: () => (
-          //   <TouchableHighlight onPress={() => navigation.goBack()}>
-          //     <MaterialCommunityIcons name="close" color="#fff" size={30} />
-          //   </TouchableHighlight>
-          // ),
+          header: (props: StackHeaderProps) => (
+            <Header {...props} isGoBack={true} />
+          ),
         }}
       />
     </Stack.Navigator>
   );
 };
 
-export default HomeScreenRouter;
+export default StackNavigator;
