@@ -1,21 +1,43 @@
 import React, { SFC } from 'react';
+import { View, StyleSheet } from 'react-native';
 import {
-  Card,
-  CardItem,
-  Content,
-  Left,
-  Body,
-  Text,
   Button,
+  Card,
+  Layout,
+  Text,
   Icon,
-  Right,
-} from 'native-base';
+  IconProps,
+} from '@ui-kitten/components';
+
 import { ItemModel } from '../../services/item/models';
 
 import {
   ScreenNavigationProp,
   RootStackParamList,
 } from '../../navigators/TabNavigation';
+
+const EditIcon = (props: IconProps) => <Icon {...props} name="edit" />;
+
+const TrashIcon = (props: IconProps) => <Icon {...props} name="trash" />;
+
+const styles = StyleSheet.create({
+  card: {
+    marginBottom: '5%',
+  },
+  cardLayout: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  cardActionsLayout: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  cardButton: {
+    width: 20,
+    marginRight: 15,
+    marginLeft: 15,
+  },
+});
 
 interface CardComponentProps extends ScreenNavigationProp {
   item: ItemModel;
@@ -28,50 +50,31 @@ const CardComponent: SFC<CardComponentProps> = ({
   deleteItem,
 }) => {
   return (
-    <Card>
-      <CardItem>
-        <Left>
-          <Body>
-            <Text>{item.jan_code}</Text>
-            <Text note>{item.item_name}</Text>
-          </Body>
-        </Left>
-      </CardItem>
-      <CardItem cardBody>
-        <Content horizontal={true}>
-          <Text note>test text</Text>
-        </Content>
-      </CardItem>
-      <CardItem>
-        <Left>
-          <Button transparent>
-            <Icon active name="thumbs-up" />
-            <Text>0 Likes</Text>
-          </Button>
-        </Left>
-        <Body>
+    <Card style={styles.card}>
+      <Layout style={styles.cardLayout}>
+        <View>
+          <Text category="h6">{item.jan_code}</Text>
+          <Text category="s1">{item.item_name}</Text>
+        </View>
+        <View style={styles.cardActionsLayout}>
           <Button
-            transparent
             onPress={() => {
               navigation.push('ItemUpdate' as keyof RootStackParamList, {
                 item,
               });
             }}
-          >
-            <Icon
-              active
-              name="edit"
-              style={{ fontSize: 25, color: 'gray' }}
-              type="MaterialIcons"
-            />
-          </Button>
-        </Body>
-        <Right>
-          <Button transparent onPress={() => deleteItem(item.id)}>
-            <Icon active name="trash" style={{ fontSize: 30, color: 'gray' }} />
-          </Button>
-        </Right>
-      </CardItem>
+            appearance="ghost"
+            accessoryLeft={EditIcon}
+            style={styles.cardButton}
+          />
+          <Button
+            onPress={() => deleteItem(item.id)}
+            appearance="ghost"
+            accessoryLeft={TrashIcon}
+            style={styles.cardButton}
+          />
+        </View>
+      </Layout>
     </Card>
   );
 };

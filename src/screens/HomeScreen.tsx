@@ -1,7 +1,8 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Container, Content, Spinner, Button, Text } from 'native-base';
+import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { Layout, Spinner, Button } from '@ui-kitten/components';
 
 import {
   ScreenNavigationProp,
@@ -27,6 +28,20 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     },
     dispatch,
   );
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    padding: 15,
+  },
+  cardContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+  },
+});
 
 interface HomeScreenProps extends ScreenNavigationProp {
   items: ItemModel[];
@@ -66,30 +81,36 @@ const HomeScreen: FC<HomeScreenProps> = ({
 
   return (
     <>
-      <Container>
-        {isLoading ? (
-          <Spinner color="blue" />
-        ) : (
-          <Content padder>
-            {items.map((item: ItemModel, index: number) => (
-              <CardComponent
-                key={index}
-                item={item}
-                navigation={navigation}
-                deleteItem={deleteItem}
-                route={route}
-              />
-            ))}
-            <Button
-              onPress={() =>
-                navigation.navigate('ItemPost' as keyof RootStackParamList)
-              }
-            >
-              <Text>New Item</Text>
-            </Button>
-          </Content>
-        )}
-      </Container>
+      <SafeAreaView style={{ flex: 1 }}>
+        <Layout style={styles.mainContainer}>
+          <ScrollView>
+            <Layout style={styles.cardContainer}>
+              {isLoading ? (
+                <Spinner />
+              ) : (
+                <>
+                  {items.map((item: ItemModel, index: number) => (
+                    <CardComponent
+                      key={index}
+                      item={item}
+                      navigation={navigation}
+                      deleteItem={deleteItem}
+                      route={route}
+                    />
+                  ))}
+                </>
+              )}
+              <Button
+                onPress={() =>
+                  navigation.navigate('ItemPost' as keyof RootStackParamList)
+                }
+              >
+                New Item
+              </Button>
+            </Layout>
+          </ScrollView>
+        </Layout>
+      </SafeAreaView>
     </>
   );
 };

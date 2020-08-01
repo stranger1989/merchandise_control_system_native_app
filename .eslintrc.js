@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     'react/prop-types': 'off',
     'react/prefer-stateless-function': 'off',
+    'react/display-name': 'off',
 
     // prettier
     'prettier/prettier': [
