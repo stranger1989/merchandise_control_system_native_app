@@ -27,7 +27,7 @@ const App: FC = () => {
 
   useEffect(() => {
     const animationDisplay = async () => {
-      await timeout(3000);
+      await timeout(1300);
       setAppIsReady(true);
     };
 
@@ -51,11 +51,11 @@ const App: FC = () => {
         <LottieView
           ref={animation}
           style={{
-            width: 300,
-            height: 300,
+            width: 400,
+            height: 400,
             marginBottom: 100,
           }}
-          source={require('../assets/testLottie.json')}
+          source={require('../assets/splash.json')}
           // OR find more Lottie files @ https://lottiefiles.com/featured
           // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
         />
