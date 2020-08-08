@@ -10,6 +10,7 @@ import AccountScreen from '../screens/AccountScreen';
 
 import ItemPostScreen from '../screens/ItemPostScreen';
 import ItemUpdateScreen from '../screens/ItemUpdateScreen';
+import ItemDetailScreen from '../screens/ItemDetailScreen';
 
 import Header from '../components/organisms/Header';
 
@@ -57,6 +58,15 @@ const StackNavigator: SFC<StackNavigatorProps> = ({ screenName }) => {
         component={ItemUpdateScreen}
         options={{
           cardShadowEnabled: true,
+          header: (props: StackHeaderProps) => (
+            <Header {...props} isGoBack={true} />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="ItemDetail"
+        component={ItemDetailScreen}
+        options={{
           header: (props: StackHeaderProps) => (
             <Header {...props} isGoBack={true} />
           ),

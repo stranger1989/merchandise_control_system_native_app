@@ -5,10 +5,21 @@ import { registerRootComponent } from 'expo';
 import * as eva from '@eva-design/eva';
 import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { default as theme } from './theme.json';
+import { default as customMapping } from './custom-mapping.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SafeAreaView, View } from 'react-native';
 import LottieView from 'lottie-react-native';
+import {
+  useFonts,
+  NunitoSans_200ExtraLight,
+  NunitoSans_300Light,
+  NunitoSans_400Regular,
+  NunitoSans_600SemiBold,
+  NunitoSans_700Bold,
+  NunitoSans_800ExtraBold,
+  NunitoSans_900Black,
+} from '@expo-google-fonts/nunito-sans';
 
 import store from './store/configureStore';
 
@@ -25,9 +36,19 @@ const App: FC = () => {
   const [appIsReady, setAppIsReady] = useState(false);
   const animation = useRef(null);
 
+  const [fontsLoaded] = useFonts({
+    NunitoSans_200ExtraLight,
+    NunitoSans_300Light,
+    NunitoSans_400Regular,
+    NunitoSans_600SemiBold,
+    NunitoSans_700Bold,
+    NunitoSans_800ExtraBold,
+    NunitoSans_900Black,
+  });
+
   useEffect(() => {
     const animationDisplay = async () => {
-      await timeout(1300);
+      await timeout(1800);
       setAppIsReady(true);
     };
 
@@ -38,7 +59,7 @@ const App: FC = () => {
     animation.current.play();
   }, []);
 
-  if (!appIsReady) {
+  if (!appIsReady && !fontsLoaded) {
     return (
       <View
         style={{
@@ -67,7 +88,12 @@ const App: FC = () => {
     <Provider store={store}>
       <NavigationContainer>
         <IconRegistry icons={EvaIconsPack} />
-        <ApplicationProvider {...eva} theme={{ ...eva.light, ...theme }}>
+        <ApplicationProvider
+          {...eva}
+          theme={{ ...eva.light, ...theme }}
+          customMapping={customMapping}
+          mapping={eva.mapping}
+        >
           <SafeAreaProvider>
             <SafeAreaView
               style={{ flex: 1, backgroundColor: theme['color-primary-500'] }}

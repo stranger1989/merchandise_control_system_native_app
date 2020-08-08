@@ -1,5 +1,5 @@
 import React, { SFC } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, ImageBackground } from 'react-native';
 import {
   Button,
   Card,
@@ -16,15 +16,22 @@ import {
   RootStackParamList,
 } from '../../navigators/TabNavigation';
 
+import { images } from '../../../assets/index';
+
 const EditIcon = (props: IconProps) => <Icon {...props} name="edit" />;
 
 const TrashIcon = (props: IconProps) => <Icon {...props} name="trash" />;
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: '5%',
+    margin: '4%',
+    borderWidth: 0,
   },
   cardLayout: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  itemInfoLayout: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -36,6 +43,12 @@ const styles = StyleSheet.create({
     width: 20,
     marginRight: 15,
     marginLeft: 15,
+  },
+  image: {
+    width: 100,
+    height: 100,
+    margin: -30,
+    marginRight: 20,
   },
 });
 
@@ -50,11 +63,27 @@ const CardComponent: SFC<CardComponentProps> = ({
   deleteItem,
 }) => {
   return (
-    <Card style={styles.card}>
+    <Card
+      style={styles.card}
+      onPress={() => {
+        navigation.push('ItemDetail' as keyof RootStackParamList, {
+          item,
+        });
+      }}
+    >
       <Layout style={styles.cardLayout}>
-        <View>
-          <Text category="h6">{item.jan_code}</Text>
-          <Text category="s1">{item.item_name}</Text>
+        <View style={styles.itemInfoLayout}>
+          <ImageBackground
+            source={images[`dummy_${item.jan_code}`] ?? null}
+            resizeMode="cover"
+            style={styles.image}
+          />
+          <View>
+            <Text category="s2" style={{ color: 'grey' }}>
+              {item.jan_code}
+            </Text>
+            <Text category="s2">{item.item_name}</Text>
+          </View>
         </View>
         <View style={styles.cardActionsLayout}>
           <Button

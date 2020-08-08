@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
 import { Layout, Spinner, Button } from '@ui-kitten/components';
 
 import {
@@ -32,14 +32,28 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 15,
   },
   cardContainer: {
+    paddingTop: 20,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 8,
+      height: 10,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+
+    elevation: 10,
+    backgroundColor: '#0000',
+  },
+  spinnerContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
@@ -83,12 +97,14 @@ const HomeScreen: FC<HomeScreenProps> = ({
     <>
       <SafeAreaView style={{ flex: 1 }}>
         <Layout style={styles.mainContainer}>
-          <ScrollView>
-            <Layout style={styles.cardContainer}>
-              {isLoading ? (
-                <Spinner />
-              ) : (
-                <>
+          {isLoading ? (
+            <View style={styles.spinnerContainer}>
+              <Spinner />
+            </View>
+          ) : (
+            <>
+              <ScrollView>
+                <Layout style={styles.cardContainer}>
                   {items.map((item: ItemModel, index: number) => (
                     <CardComponent
                       key={index}
@@ -98,17 +114,42 @@ const HomeScreen: FC<HomeScreenProps> = ({
                       route={route}
                     />
                   ))}
-                </>
-              )}
-              <Button
-                onPress={() =>
-                  navigation.navigate('ItemPost' as keyof RootStackParamList)
-                }
+                </Layout>
+              </ScrollView>
+              <View
+                style={{
+                  position: 'absolute',
+                  bottom: 30,
+                  right: 30,
+                  alignSelf: 'flex-end',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 8,
+                    height: 10,
+                  },
+                  shadowOpacity: 0.15,
+                  shadowRadius: 10,
+
+                  elevation: 10,
+                  backgroundColor: '#0000',
+                }}
               >
-                New Item
-              </Button>
-            </Layout>
-          </ScrollView>
+                <Button
+                  onPress={() =>
+                    navigation.navigate('ItemPost' as keyof RootStackParamList)
+                  }
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    alignSelf: 'flex-end',
+                  }}
+                >
+                  New Item
+                </Button>
+              </View>
+            </>
+          )}
         </Layout>
       </SafeAreaView>
     </>
