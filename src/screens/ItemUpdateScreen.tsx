@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Container } from 'native-base';
 import { change } from 'redux-form';
 import { IndexPath } from '@ui-kitten/components';
 
@@ -53,22 +52,20 @@ const ItemUpdateScreen: FC<ItemUpdateScreenProps> = ({
   };
 
   return (
-    <Container>
-      <ItemFormComponent
-        submitFunction={submit}
-        change={change}
-        initialValues={{
-          jan_code: route.params?.item.jan_code ?? '',
-          item_name: route.params?.item.item_name ?? '',
-          price: String(route.params?.item.price) ?? '0',
-          category_id: new IndexPath(route.params?.item.category_id ?? 0),
-          series_id: new IndexPath(route.params?.item.series_id ?? 0),
-          stock: String(route.params?.item.stock) ?? 0,
-          discontinued: route.params?.item.discontinued ?? false,
-          release_date: new Date(route.params?.item.release_date ?? ''),
-        }}
-      />
-    </Container>
+    <ItemFormComponent
+      submitFunction={submit}
+      change={change}
+      initialValues={{
+        jan_code: route.params?.item.jan_code ?? '',
+        item_name: route.params?.item.item_name ?? '',
+        price: String(route.params?.item.price) ?? '0',
+        category_id: new IndexPath(route.params?.item.category_id ?? 0),
+        series_id: new IndexPath(route.params?.item.series_id ?? 0),
+        stock: String(route.params?.item.stock) ?? 0,
+        discontinued: route.params?.item.discontinued ?? false,
+        release_date: new Date(route.params?.item.release_date ?? ''),
+      }}
+    />
   );
 };
 
