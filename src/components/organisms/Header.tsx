@@ -36,7 +36,7 @@ const HeaderComponent: SFC<HeaderProps> = ({
       <TopNavigation
         alignment="center"
         title={() => (
-          <Text style={[eva?.style?.headerTitle, style]}>
+          <Text category="h6" style={[eva?.style?.headerTitle, style]}>
             {scene.route.name}
           </Text>
         )}

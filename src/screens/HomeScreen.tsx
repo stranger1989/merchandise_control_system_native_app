@@ -1,19 +1,17 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { SafeAreaView, StyleSheet, ScrollView, View } from 'react-native';
-import { Layout, Spinner, Button } from '@ui-kitten/components';
+import { SafeAreaView } from 'react-native';
+import { Layout } from '@ui-kitten/components';
 
-import {
-  ScreenNavigationProp,
-  RootStackParamList,
-} from '../navigators/TabNavigation';
+import { ScreenNavigationProp } from '../navigators/TabNavigation';
 
 import { AllState } from '../store/configureStore';
 import { fetchAllItems, deleteItem } from '../actions/item';
 import { ItemId, ItemModel } from '../services/item/models';
 
-import CardComponent from '../components/organisms/Card';
+import SpinnerComponent from '../components/organisms/Spinner';
+import ItemCardListComponent from '../components/organisms/ItemCardList';
 
 const mapStateToProps = (state: AllState) => ({
   items: state.item.items,
@@ -28,34 +26,6 @@ const mapDispatchToProps = (dispatch: Dispatch) =>
     },
     dispatch,
   );
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  cardContainer: {
-    paddingTop: 20,
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 8,
-      height: 10,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-
-    elevation: 10,
-    backgroundColor: '#0000',
-  },
-  spinnerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
 
 interface HomeScreenProps extends ScreenNavigationProp {
   items: ItemModel[];
@@ -96,59 +66,16 @@ const HomeScreen: FC<HomeScreenProps> = ({
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
-        <Layout style={styles.mainContainer}>
+        <Layout>
           {isLoading ? (
-            <View style={styles.spinnerContainer}>
-              <Spinner />
-            </View>
+            <SpinnerComponent />
           ) : (
-            <>
-              <ScrollView>
-                <Layout style={styles.cardContainer}>
-                  {items.map((item: ItemModel, index: number) => (
-                    <CardComponent
-                      key={index}
-                      item={item}
-                      navigation={navigation}
-                      deleteItem={deleteItem}
-                      route={route}
-                    />
-                  ))}
-                </Layout>
-              </ScrollView>
-              <View
-                style={{
-                  position: 'absolute',
-                  bottom: 30,
-                  right: 30,
-                  alignSelf: 'flex-end',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 8,
-                    height: 10,
-                  },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 10,
-
-                  elevation: 10,
-                  backgroundColor: '#0000',
-                }}
-              >
-                <Button
-                  onPress={() =>
-                    navigation.navigate('ItemPost' as keyof RootStackParamList)
-                  }
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    alignSelf: 'flex-end',
-                  }}
-                >
-                  New Item
-                </Button>
-              </View>
-            </>
+            <ItemCardListComponent
+              items={items}
+              deleteItem={deleteItem}
+              navigation={navigation}
+              route={route}
+            />
           )}
         </Layout>
       </SafeAreaView>
