@@ -37,7 +37,7 @@ const ItemUpdateScreen: FC<ItemUpdateScreenProps> = ({
   navigation,
   route,
 }) => {
-  const submit = (values: ItemFormModel) => {
+  const updateSubmit = (values: ItemFormModel) => {
     const convertValues = {
       ...values,
       price: Number(values.price) ?? 0,
@@ -53,7 +53,7 @@ const ItemUpdateScreen: FC<ItemUpdateScreenProps> = ({
 
   return (
     <ItemFormComponent
-      submitFunction={submit}
+      submitFunction={updateSubmit}
       change={change}
       initialValues={{
         jan_code: route.params?.item.jan_code ?? '',

@@ -48,9 +48,6 @@ const itemReducer: Reducer<ItemState, ItemAction> = (
         error: action.payload.error,
       };
     default: {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const _ = action as never;
-
       return state;
     }
   }

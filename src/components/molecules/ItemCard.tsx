@@ -23,11 +23,11 @@ const EditIcon = (props: IconProps) => <Icon {...props} name="edit" />;
 const TrashIcon = (props: IconProps) => <Icon {...props} name="trash" />;
 
 const styles = StyleSheet.create({
-  card: {
+  itemCard: {
     margin: '4%',
     borderWidth: 0,
   },
-  cardLayout: {
+  itemCardLayout: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
@@ -35,16 +35,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  cardActionsLayout: {
+  cardActionsButtonLayout: {
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  cardButton: {
+  cardActionsButton: {
     width: 20,
     marginRight: 15,
     marginLeft: 15,
   },
-  image: {
+  itemCardImage: {
     width: 100,
     height: 100,
     margin: -30,
@@ -52,40 +52,40 @@ const styles = StyleSheet.create({
   },
 });
 
-interface CardComponentProps extends ScreenNavigationProp {
+interface ItemCardComponentProps extends ScreenNavigationProp {
   item: ItemModel;
   deleteItem: (itemId: number) => void;
 }
 
-const CardComponent: SFC<CardComponentProps> = ({
+const ItemCardComponent: SFC<ItemCardComponentProps> = ({
   item,
   navigation,
   deleteItem,
 }) => {
   return (
     <Card
-      style={styles.card}
+      style={styles.itemCard}
       onPress={() => {
         navigation.push('ItemDetail' as keyof RootStackParamList, {
           item,
         });
       }}
     >
-      <Layout style={styles.cardLayout}>
+      <Layout style={styles.itemCardLayout}>
         <View style={styles.itemInfoLayout}>
           <ImageBackground
             source={images[`dummy_${item.jan_code}`] ?? null}
             resizeMode="cover"
-            style={styles.image}
+            style={styles.itemCardImage}
           />
           <View>
-            <Text category="s2" style={{ color: 'grey' }}>
+            <Text category="s1" style={{ color: 'grey' }}>
               {item.jan_code}
             </Text>
-            <Text category="s2">{item.item_name}</Text>
+            <Text category="s1">{item.item_name}</Text>
           </View>
         </View>
-        <View style={styles.cardActionsLayout}>
+        <View style={styles.cardActionsButtonLayout}>
           <Button
             onPress={() => {
               navigation.push('ItemUpdate' as keyof RootStackParamList, {
@@ -94,13 +94,13 @@ const CardComponent: SFC<CardComponentProps> = ({
             }}
             appearance="ghost"
             accessoryLeft={EditIcon}
-            style={styles.cardButton}
+            style={styles.cardActionsButton}
           />
           <Button
             onPress={() => deleteItem(item.id)}
             appearance="ghost"
             accessoryLeft={TrashIcon}
-            style={styles.cardButton}
+            style={styles.cardActionsButton}
           />
         </View>
       </Layout>
@@ -108,4 +108,4 @@ const CardComponent: SFC<CardComponentProps> = ({
   );
 };
 
-export default CardComponent;
+export default ItemCardComponent;

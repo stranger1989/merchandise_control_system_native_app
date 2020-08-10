@@ -47,16 +47,11 @@ const validate = (values: ItemFormModel) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    padding: 15,
-  },
-  formContainer: {
+  itemFormScreen: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'flex-start',
+    padding: 15,
   },
 });
 
@@ -74,107 +69,105 @@ const ItemForm: FC<
     <>
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView>
-          <Layout style={styles.mainContainer}>
-            <View style={styles.formContainer}>
-              <Field
-                name="jan_code"
-                type="number-pad"
-                label="Jan Code"
-                component={TextInputForm}
-              />
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="item_name"
-                type="default"
-                label="Item Name"
-                component={TextInputForm}
-              />
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="price"
-                type="number-pad"
-                label="Price"
-                component={TextInputForm}
-              />
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="category_id"
-                label="Category"
-                component={SelectForm}
-                change={change}
-                fromValueList={CATEGORY_NAME}
-              >
-                {Object.keys(CATEGORY_NAME).map((categoryId: string) => {
-                  return (
-                    <SelectItem
-                      key={categoryId}
-                      title={CATEGORY_NAME[Number(categoryId)]}
-                    />
-                  );
-                })}
-              </Field>
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="series_id"
-                label="Series"
-                component={SelectForm}
-                change={change}
-                fromValueList={SERIES_NAME}
-              >
-                {Object.keys(SERIES_NAME).map((seriesId: string) => {
-                  return (
-                    <SelectItem
-                      key={seriesId}
-                      title={SERIES_NAME[Number(seriesId)]}
-                    />
-                  );
-                })}
-              </Field>
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="stock"
-                type="number-pad"
-                label="Stock"
-                component={TextInputForm}
-              />
-              <View style={{ height: 11 }}></View>
-              <Field
-                name="discontinued"
-                label="Discontinued"
-                component={CheckBoxForm}
-              />
-              <View style={{ height: 13 }}></View>
-              <Text category="label">Release Date</Text>
-              <View style={{ height: 5 }}></View>
-              {!show ? (
-                <Button onPress={() => setShow(true)} status="info">
-                  Show Date Picker
-                </Button>
-              ) : (
-                <Button onPress={() => setShow(false)} status="info">
-                  Close Date Picker
-                </Button>
-              )}
-              {show && (
-                <>
-                  <Field
-                    name="release_date"
-                    label="Release Date"
-                    type="date"
-                    component={DateForm}
+          <Layout style={styles.itemFormScreen}>
+            <Field
+              name="jan_code"
+              type="number-pad"
+              label="Jan Code"
+              component={TextInputForm}
+            />
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="item_name"
+              type="default"
+              label="Item Name"
+              component={TextInputForm}
+            />
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="price"
+              type="number-pad"
+              label="Price"
+              component={TextInputForm}
+            />
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="category_id"
+              label="Category"
+              component={SelectForm}
+              change={change}
+              fromValueList={CATEGORY_NAME}
+            >
+              {Object.keys(CATEGORY_NAME).map((categoryId: string) => {
+                return (
+                  <SelectItem
+                    key={categoryId}
+                    title={CATEGORY_NAME[Number(categoryId)]}
                   />
-                </>
-              )}
-              <View style={{ height: 17 }}></View>
-              <Button onPress={handleSubmit(submitFunction)} disabled={invalid}>
-                Submit
+                );
+              })}
+            </Field>
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="series_id"
+              label="Series"
+              component={SelectForm}
+              change={change}
+              fromValueList={SERIES_NAME}
+            >
+              {Object.keys(SERIES_NAME).map((seriesId: string) => {
+                return (
+                  <SelectItem
+                    key={seriesId}
+                    title={SERIES_NAME[Number(seriesId)]}
+                  />
+                );
+              })}
+            </Field>
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="stock"
+              type="number-pad"
+              label="Stock"
+              component={TextInputForm}
+            />
+            <View style={{ height: 11 }}></View>
+            <Field
+              name="discontinued"
+              label="Discontinued"
+              component={CheckBoxForm}
+            />
+            <View style={{ height: 13 }}></View>
+            <Text category="label">Release Date</Text>
+            <View style={{ height: 5 }}></View>
+            {!show ? (
+              <Button onPress={() => setShow(true)} status="info">
+                Show Date Picker
               </Button>
-              <View style={{ height: 11 }}></View>
-              <Button onPress={reset} disabled={!dirty} appearance="outline">
-                Reset
+            ) : (
+              <Button onPress={() => setShow(false)} status="info">
+                Close Date Picker
               </Button>
-              <View style={{ height: 11 }}></View>
-            </View>
+            )}
+            {show && (
+              <>
+                <Field
+                  name="release_date"
+                  label="Release Date"
+                  type="date"
+                  component={DateForm}
+                />
+              </>
+            )}
+            <View style={{ height: 17 }}></View>
+            <Button onPress={handleSubmit(submitFunction)} disabled={invalid}>
+              Submit
+            </Button>
+            <View style={{ height: 11 }}></View>
+            <Button onPress={reset} disabled={!dirty} appearance="outline">
+              Reset
+            </Button>
+            <View style={{ height: 11 }}></View>
           </Layout>
         </ScrollView>
       </SafeAreaView>

@@ -30,7 +30,7 @@ const ItemPostScreen: FC<ItemPostScreenProps> = ({
   change,
   navigation,
 }) => {
-  const submit = (values: ItemFormModel) => {
+  const postSubmit = (values: ItemFormModel) => {
     const convertValues = {
       ...values,
       price: Number(values.price) ?? 0,
@@ -46,7 +46,7 @@ const ItemPostScreen: FC<ItemPostScreenProps> = ({
 
   return (
     <ItemFormComponent
-      submitFunction={submit}
+      submitFunction={postSubmit}
       change={change}
       initialValues={{
         category_id: new IndexPath(0),

@@ -8,7 +8,7 @@ import { default as theme } from './theme.json';
 import { default as customMapping } from './custom-mapping.json';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View, StyleSheet } from 'react-native';
 import LottieView from 'lottie-react-native';
 import {
   useFonts,
@@ -32,9 +32,24 @@ const timeout = (ms: number): Promise<void> => {
   return new Promise<void>((resolve) => setTimeout(resolve, ms));
 };
 
+const styles = StyleSheet.create({
+  splashScreen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme['color-primary-500'],
+  },
+  lottieSplashAnimation: {
+    width: 400,
+    height: 400,
+    marginBottom: 100,
+  },
+  safeAreaView: { flex: 1, backgroundColor: theme['color-primary-500'] },
+});
+
 const App: FC = () => {
-  const [appIsReady, setAppIsReady] = useState(false);
-  const animation = useRef(null);
+  const [animationLoaded, setAnimationLoaded] = useState(false);
+  const animation = useRef<LottieView | null>(null);
 
   const [fontsLoaded] = useFonts({
     NunitoSans_200ExtraLight,
@@ -48,37 +63,25 @@ const App: FC = () => {
 
   useEffect(() => {
     const animationDisplay = async () => {
-      await timeout(1800);
-      setAppIsReady(true);
+      await timeout(3000);
+      setAnimationLoaded(true);
     };
 
     animationDisplay();
   }, []);
 
   useEffect(() => {
-    animation.current.play();
+    animation.current?.play();
   }, []);
 
-  if (!appIsReady && !fontsLoaded) {
+  if (!animationLoaded || !fontsLoaded) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: theme['color-primary-500'],
-        }}
-      >
+      <View style={styles.splashScreen}>
         <LottieView
           ref={animation}
-          style={{
-            width: 400,
-            height: 400,
-            marginBottom: 100,
-          }}
+          style={styles.lottieSplashAnimation}
           source={require('../assets/splash.json')}
-          // OR find more Lottie files @ https://lottiefiles.com/featured
-          // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+          loop={false}
         />
       </View>
     );
@@ -91,13 +94,10 @@ const App: FC = () => {
         <ApplicationProvider
           {...eva}
           theme={{ ...eva.light, ...theme }}
-          customMapping={customMapping}
-          mapping={eva.mapping}
+          customMapping={{ ...eva.mapping, ...customMapping }}
         >
           <SafeAreaProvider>
-            <SafeAreaView
-              style={{ flex: 1, backgroundColor: theme['color-primary-500'] }}
-            >
+            <SafeAreaView style={styles.safeAreaView}>
               <TabNavigation screenName="Home" />
             </SafeAreaView>
           </SafeAreaProvider>
@@ -110,5 +110,5 @@ const App: FC = () => {
 const startNode = EXPO_START_ENV;
 
 export default startNode === 'storybook'
-  ? registerRootComponent(storybook)
+  ? registerRootComponent(storybook as any)
   : registerRootComponent(App);
