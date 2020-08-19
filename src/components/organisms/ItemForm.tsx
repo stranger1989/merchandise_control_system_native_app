@@ -53,6 +53,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     padding: 15,
   },
+  dateInputArea: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+  },
 });
 
 interface ReduxFormExtendProps {
@@ -150,14 +156,14 @@ const ItemForm: FC<
               </Button>
             )}
             {show && (
-              <>
+              <View style={styles.dateInputArea}>
                 <Field
                   name="release_date"
                   label="Release Date"
                   type="date"
                   component={DateForm}
                 />
-              </>
+              </View>
             )}
             <View style={{ height: 17 }}></View>
             <Button onPress={handleSubmit(submitFunction)} disabled={invalid}>

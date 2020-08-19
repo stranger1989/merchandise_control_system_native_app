@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
   itemCard: {
     margin: '4%',
     borderWidth: 0,
+    elevation: 5,
   },
   itemCardLayout: {
     flexDirection: 'row',
@@ -45,10 +46,13 @@ const styles = StyleSheet.create({
     marginLeft: 15,
   },
   itemCardImage: {
-    width: 100,
-    height: 100,
+    width: 110,
+    height: 110,
     margin: -30,
     marginRight: 20,
+  },
+  itemName: {
+    width: 120,
   },
 });
 
@@ -78,7 +82,7 @@ const ItemCardComponent: SFC<ItemCardComponentProps> = ({
             resizeMode="cover"
             style={styles.itemCardImage}
           />
-          <View>
+          <View style={styles.itemName}>
             <Text category="s1" style={{ color: 'grey' }}>
               {item.jan_code}
             </Text>

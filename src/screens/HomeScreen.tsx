@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 
 import { ScreenNavigationProp } from '../navigators/TabNavigation';
@@ -66,17 +66,23 @@ const HomeScreen: FC<HomeScreenProps> = ({
   return (
     <>
       <SafeAreaView style={{ flex: 1 }}>
-        <Layout>
-          {isLoading ? (
-            <SpinnerComponent />
-          ) : (
-            <ItemCardListComponent
-              items={items}
-              deleteItem={deleteItem}
-              navigation={navigation}
-              route={route}
-            />
-          )}
+        <Layout style={{ flex: 1 }}>
+          <View style={{ flex: 1 }}>
+            {isLoading ? (
+              <SpinnerComponent />
+            ) : (
+              <>
+                <View>
+                  <ItemCardListComponent
+                    items={items}
+                    deleteItem={deleteItem}
+                    navigation={navigation}
+                    route={route}
+                  />
+                </View>
+              </>
+            )}
+          </View>
         </Layout>
       </SafeAreaView>
     </>

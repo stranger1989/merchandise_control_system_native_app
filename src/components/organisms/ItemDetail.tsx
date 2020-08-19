@@ -1,6 +1,7 @@
 import React, { SFC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text, Button, Divider } from '@ui-kitten/components';
+import moment from 'moment';
 
 import { ScreenNavigationProp } from '../../navigators/TabNavigation';
 
@@ -23,6 +24,9 @@ const styles = StyleSheet.create({
   },
   itemHeadingLayout: {
     width: '70%',
+  },
+  itemClassificationLayout: {
+    width: '30%',
   },
   itemSubInfoLayout: {
     marginBottom: 5,
@@ -47,7 +51,7 @@ const ItemDetailComponent: SFC<ScreenNavigationProp> = ({ route }) => {
           <Text category="h5">{route.params?.item.item_name}</Text>
           <Text category="h5">{`¥ ${route.params?.item.price}`}</Text>
         </View>
-        <View>
+        <View style={styles.itemClassificationLayout}>
           <Button status="primary" size="small">
             {CATEGORY_NAME[Number(route.params?.item.category_id)]}
           </Button>
@@ -64,19 +68,21 @@ const ItemDetailComponent: SFC<ScreenNavigationProp> = ({ route }) => {
       <Divider />
       <View style={styles.secondSectionLayout}>
         <View style={styles.itemSubInfoLayout}>
-          <Text category="s2" style={{ width: '35%' }}>
-            stock{' '}
+          <Text category="s1" style={{ width: '35%' }}>
+            stock
           </Text>
           <Text>{`${route.params?.item.stock}pcs`}</Text>
         </View>
         <View style={styles.itemSubInfoLayout}>
-          <Text category="s2" style={{ width: '35%' }}>
-            release date{' '}
+          <Text category="s1" style={{ width: '35%' }}>
+            release date
           </Text>
-          <Text>{`${String(route.params?.item.release_date)}`}</Text>
+          <Text>{`${moment(route.params?.item.release_date).format(
+            'YYYY-MM-DD',
+          )}`}</Text>
         </View>
         <View style={styles.itemSubInfoLayout}>
-          <Text category="s2" style={{ width: '35%' }}>
+          <Text category="s1" style={{ width: '35%' }}>
             description
           </Text>
           <Text>************************</Text>

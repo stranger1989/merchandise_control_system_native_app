@@ -12,9 +12,6 @@ import {
 } from '../../navigators/TabNavigation';
 
 const styles = StyleSheet.create({
-  homeScreen: {
-    flex: 1,
-  },
   itemCardLayout: {
     paddingTop: 20,
     flex: 1,
@@ -28,7 +25,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 10,
 
-    elevation: 10,
+    elevation: 5,
     backgroundColor: '#0000',
   },
   newItemButtonLayout: {
@@ -43,8 +40,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.15,
     shadowRadius: 10,
-
-    elevation: 10,
     backgroundColor: '#0000',
   },
 });
@@ -80,6 +75,7 @@ const ItemCardListComponent: SFC<ItemCardListComponentProps> = ({
           onPress={() =>
             navigation.navigate('ItemPost' as keyof RootStackParamList)
           }
+          style={{ elevation: 5 }}
         >
           New Item
         </Button>
