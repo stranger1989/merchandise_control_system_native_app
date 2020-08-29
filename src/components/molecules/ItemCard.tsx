@@ -9,7 +9,7 @@ import {
   IconProps,
 } from '@ui-kitten/components';
 
-import { ItemModel } from '../../services/item/models';
+import { ItemModel } from '../../api/item';
 
 import {
   ScreenNavigationProp,

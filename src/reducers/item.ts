@@ -2,8 +2,8 @@ import { Reducer } from 'redux';
 import { AxiosError } from 'axios';
 
 import { ItemAction } from '../actions/item';
-import * as ActionType from '../actions/itemConstants';
-import { ItemModel } from '../services/item/models';
+import * as ActionType from '../actions/itemActionTypes';
+import { ItemModel } from '../api/item';
 
 export interface ItemState {
   items: ItemModel[];

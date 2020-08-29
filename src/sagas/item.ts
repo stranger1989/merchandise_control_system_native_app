@@ -1,20 +1,20 @@
 import { all, call, fork, put, takeLatest, select } from 'redux-saga/effects';
 import { AllState } from '../store/configureStore';
-import * as Action from '../actions/itemConstants';
+import * as Action from '../actions/itemActionTypes';
 import * as actions from '../actions/item';
 import {
+  ItemModel,
   fetchItemsApi,
   postItemApi,
   deleteItemApi,
   updateItemApi,
-} from '../services/item/api';
-import { ItemModel } from '../services/item/models';
+} from '../api/item';
 
 const getItems = (state: AllState) => state.item.items;
 
 function* fetchAllItems() {
   try {
-    const api = fetchItemsApi();
+    const api = () => fetchItemsApi();
     const items = yield call(api);
 
     yield put(actions.fetchAllItems.succeed({ items }));
@@ -29,7 +29,7 @@ export function* watchFetchItems() {
 
 function* postItem(action: ReturnType<typeof actions.postItem.start>) {
   try {
-    const api = postItemApi(action.payload);
+    const api = () => postItemApi(action.payload);
     const responseItem = yield call(api);
     const currentItems = yield select(getItems);
     const items = [...currentItems, responseItem];
@@ -46,7 +46,7 @@ export function* watchPostItem() {
 
 function* deleteItem(action: ReturnType<typeof actions.deleteItem.start>) {
   try {
-    const api = deleteItemApi(action.payload);
+    const api = () => deleteItemApi(action.payload);
     const responseId = yield call(api);
     const currentItems = yield select(getItems);
     const items = [...currentItems].filter(
@@ -64,7 +64,7 @@ export function* watchDeleteItem() {
 
 function* updateItem(action: ReturnType<typeof actions.updateItem.start>) {
   try {
-    const api = updateItemApi(action.payload);
+    const api = () => updateItemApi(action.payload);
     const responseItem = yield call(api);
     const currentItems = yield select(getItems);
     const items = [...currentItems].map((item: ItemModel) => {

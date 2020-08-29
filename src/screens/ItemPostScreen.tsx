@@ -1,36 +1,18 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-import { change } from 'redux-form';
+import { useDispatch } from 'react-redux';
 import { IndexPath } from '@ui-kitten/components';
 
 import { ScreenNavigationProp } from '../navigators/TabNavigation';
 
 import { postItem } from '../actions/item';
-import { ItemModel, ItemFormModel } from '../services/item/models';
+import { ItemFormModel } from '../api/item';
 
 import ItemFormComponent from '../components/organisms/ItemForm';
 
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      postItemStart: (params: ItemModel) => postItem.start(params),
-      change: (field: string, data: unknown) => change('itemForm', field, data),
-    },
-    dispatch,
-  );
+const ItemPostScreen: FC<ScreenNavigationProp> = ({ navigation }) => {
+  const dispatch = useDispatch();
 
-interface ItemPostScreenProps extends ScreenNavigationProp {
-  postItemStart: (params: ItemModel) => void;
-  change: (field: string, data: unknown) => void;
-}
-
-const ItemPostScreen: FC<ItemPostScreenProps> = ({
-  postItemStart,
-  change,
-  navigation,
-}) => {
-  const postSubmit = (values: ItemFormModel) => {
+  const postSubmit = async (values: ItemFormModel) => {
     const convertValues = {
       ...values,
       price: Number(values.price) ?? 0,
@@ -40,14 +22,13 @@ const ItemPostScreen: FC<ItemPostScreenProps> = ({
       discontinued: Boolean(values.discontinued) ?? false,
     };
     alert(`here is the value ${JSON.stringify(convertValues)}`);
-    postItemStart(convertValues);
+    await dispatch(postItem.start(convertValues));
     navigation.navigate('Warehouse');
   };
 
   return (
     <ItemFormComponent
       submitFunction={postSubmit}
-      change={change}
       initialValues={{
         category_id: new IndexPath(0),
         series_id: new IndexPath(0),
@@ -58,4 +39,4 @@ const ItemPostScreen: FC<ItemPostScreenProps> = ({
   );
 };
 
-export default connect(null, mapDispatchToProps)(ItemPostScreen);
+export default ItemPostScreen;
