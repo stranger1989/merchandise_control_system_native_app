@@ -1,30 +1,11 @@
 import React, { FC } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Layout } from '@ui-kitten/components';
 
 import { ScreenNavigationProp } from '../navigators/TabNavigation';
 
-import { updateItem } from '../actions/item';
-import { AllState } from '../store/configureStore';
-import { ItemId, ItemModel } from '../services/item/models';
-
 import ImageDisplay from '../components/molecules/ImageDisplay';
 import ItemDetailComponent from '../components/organisms/ItemDetail';
-
-const mapStateToProps = (state: AllState) => ({
-  items: state.item.items,
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) =>
-  bindActionCreators(
-    {
-      updateItemStart: (itemId: ItemId, params: ItemModel) =>
-        updateItem.start(itemId, params),
-    },
-    dispatch,
-  );
 
 const styles = StyleSheet.create({
   itemDetailScreen: {
@@ -52,4 +33,4 @@ const ItemDetailScreen: FC<ScreenNavigationProp> = ({ route, navigation }) => {
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ItemDetailScreen);
+export default ItemDetailScreen;

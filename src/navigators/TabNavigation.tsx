@@ -12,7 +12,7 @@ import {
 
 import StackNavigation from './StackNavigation';
 
-import { ItemModel } from '../services/item/models';
+import { ItemModel } from '../api/item';
 import BottomTab from '../components/organisms/BottomTab';
 
 export type RootStackParamList = {

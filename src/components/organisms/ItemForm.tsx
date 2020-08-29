@@ -4,7 +4,7 @@ import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Layout, Button, SelectItem, Text } from '@ui-kitten/components';
 import { CATEGORY_NAME, SERIES_NAME } from '../../constants/itemConstants';
 
-import { ItemFormModel } from '../../services/item/models';
+import { ItemFormModel } from '../../api/item';
 
 import TextInputForm from '../molecules/TextInputForm';
 import SelectForm from '../molecules/SelectForm';
@@ -63,12 +63,11 @@ const styles = StyleSheet.create({
 
 interface ReduxFormExtendProps {
   submitFunction: (params: ItemFormModel) => void;
-  change: (field: string, data: unknown) => void;
 }
 
 const ItemForm: FC<
   InjectedFormProps<ItemFormModel, ReduxFormExtendProps> & ReduxFormExtendProps
-> = ({ submitFunction, change, handleSubmit, reset, invalid, dirty }) => {
+> = ({ submitFunction, handleSubmit, reset, invalid, dirty }) => {
   const [show, setShow] = useState(false);
 
   return (
@@ -101,7 +100,6 @@ const ItemForm: FC<
               name="category_id"
               label="Category"
               component={SelectForm}
-              change={change}
               fromValueList={CATEGORY_NAME}
             >
               {Object.keys(CATEGORY_NAME).map((categoryId: string) => {
@@ -118,7 +116,6 @@ const ItemForm: FC<
               name="series_id"
               label="Series"
               component={SelectForm}
-              change={change}
               fromValueList={SERIES_NAME}
             >
               {Object.keys(SERIES_NAME).map((seriesId: string) => {

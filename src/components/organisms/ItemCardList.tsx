@@ -2,7 +2,7 @@ import React, { SFC } from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Button } from '@ui-kitten/components';
 
-import { ItemModel } from '../../services/item/models';
+import { ItemModel } from '../../api/item';
 
 import ItemCardComponent from '../molecules/ItemCard';
 

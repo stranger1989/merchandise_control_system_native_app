@@ -1,16 +1,8 @@
 import React, { FC } from 'react';
-// import { connect } from 'react-redux';
-import { Container } from 'native-base';
+import { Layout } from '@ui-kitten/components';
 
 const SalesScreen: FC = () => {
-  return (
-    <Container>{/* <HeaderComponent navigation={navigation} /> */}</Container>
-  );
+  return <Layout>{/* <HeaderComponent navigation={navigation} /> */}</Layout>;
 };
 
 export default SalesScreen;
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(AccountScreen);
